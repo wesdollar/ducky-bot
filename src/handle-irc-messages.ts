@@ -5,6 +5,7 @@ import { getUserLeftChat } from "./helpers/messages/get-user-left-chat/get-user-
 import { ircCacheResourceKeys } from "./constants/irc-cache-keys";
 import { addMessageToCache } from "./helpers/cache/add-message-to-cache/add-message-to-cache";
 import { twitchIrcCache } from "./twitch-irc-cache";
+import { featureFlags } from "./constants/feature-flags";
 
 export function handleIrcMessages(message: string) {
   const userJoinedChatCache =
@@ -21,7 +22,7 @@ export function handleIrcMessages(message: string) {
 
   const usersInChat = getNamesInChat(message) as [];
 
-  if (usersInChat && usersInChat.length) {
+  if (featureFlags.enableGetAllUsers && usersInChat && usersInChat.length) {
     addMessageToCache(
       usersInChat,
       usersInChatCache,
