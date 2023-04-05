@@ -12,7 +12,6 @@ import { formatMessageContent } from "./helpers/cache/format-message-content/for
 import { handleIrcMessages } from "./handle-irc-messages";
 import type NodeCache from "node-cache";
 import { twitchIrcCache } from "./twitch-irc-cache";
-import lodash from "lodash";
 
 dotenv.config();
 
@@ -50,11 +49,8 @@ app.get("/ducky-cb", (req, res) => {
 });
 
 app.get("/twitch-irc-cache/:resourceKey", (req, res) => {
-  let { resourceKey: requestedResource } = req.params;
-
-  requestedResource = lodash.camelCase(requestedResource);
-
-  const cacheData = twitchIrcCache.get(ircCacheResourceKeys.ircMessages);
+  const { resourceKey: requestedResource } = req.params;
+  const cacheData = twitchIrcCache.get(requestedResource);
 
   if (cacheData === undefined) {
     return res.json(

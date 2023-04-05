@@ -17,10 +17,6 @@ export const addMessageToCache = (
     return;
   }
 
-  if (typeof cacheData === "number" && cacheData === 1) {
-    cacheData = [];
-  }
-
   const msgObj = ircMessageObject(message, ircResourceKey);
   const updatedCache = [...cacheData, msgObj];
 
@@ -28,7 +24,7 @@ export const addMessageToCache = (
     cacheInstance.set(ircResourceKey, updatedCache);
 
     console.log(
-      "cache data: ",
+      `\n\n${ircResourceKey} cache data: `,
       JSON.stringify(cacheInstance.get(ircResourceKey), null, 2)
     );
 
