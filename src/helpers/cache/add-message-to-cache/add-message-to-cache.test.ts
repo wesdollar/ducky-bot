@@ -22,6 +22,8 @@ describe("addMessageToCache", () => {
 
   beforeEach(() => {
     cacheInstance = new NodeCache();
+
+    jest.restoreAllMocks();
   });
 
   afterEach(() => {

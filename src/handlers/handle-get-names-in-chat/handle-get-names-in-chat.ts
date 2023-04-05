@@ -9,8 +9,6 @@ export function handleGetNamesInChat(
 ) {
   const usersInChat = getNamesInChat(message) as [];
 
-  console.log(featureFlags.enableGetAllUsers, usersInChat);
-
   if (featureFlags.enableGetAllUsers && usersInChat && usersInChat.length) {
     addMessageToCache(
       usersInChat,
