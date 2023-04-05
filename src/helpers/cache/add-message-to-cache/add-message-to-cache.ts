@@ -20,7 +20,6 @@ export const addMessageToCache = (
   const updatedCache = [...cacheData, msgObj];
 
   try {
-    console.log("hit");
     twitchIrcCache.set(ircResourceKey, updatedCache);
 
     console.log(
