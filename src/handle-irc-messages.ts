@@ -1,11 +1,9 @@
-import { getNamesInChat } from "./helpers/messages/get-names-in-chat/get-names-in-chat";
-import { getChatMessage } from "./helpers/messages/get-chat-message/get-chat-message";
-import { getUserJoinedChat } from "./helpers/messages/get-user-joined-chat/get-user-joined-chat";
-import { getUserLeftChat } from "./helpers/messages/get-user-left-chat/get-user-left-chat";
 import { ircCacheResourceKeys } from "./constants/irc-cache-keys";
-import { addMessageToCache } from "./helpers/cache/add-message-to-cache/add-message-to-cache";
 import { twitchIrcCache } from "./twitch-irc-cache";
-import { featureFlags } from "./constants/feature-flags";
+import { handleGetNamesInChat } from "./handlers/handle-get-names-in-chat/handle-get-names-in-chat";
+import { handleGetChatMessages } from "./handlers/handle-get-chat-messages/handle-get-chat-messages";
+import { handleGetUserJoinedChat } from "./handlers/handle-get-user-joined-chat/handle-get-user-joined-chat";
+import { handleGetUserLeftChat } from "./handlers/handle-get-user-left-chat/handle-get-user-left-chat";
 
 export function handleIrcMessages(message: string) {
   const userJoinedChatCache =
@@ -20,49 +18,10 @@ export function handleIrcMessages(message: string) {
   const usersInChatCache =
     (twitchIrcCache.get(ircCacheResourceKeys.usersInChat) as []) || [];
 
-  const usersInChat = getNamesInChat(message) as [];
-
-  if (featureFlags.enableGetAllUsers && usersInChat && usersInChat.length) {
-    addMessageToCache(
-      usersInChat,
-      usersInChatCache,
-      twitchIrcCache,
-      ircCacheResourceKeys.usersInChat
-    );
-  }
-
-  const chatMessage = getChatMessage(message);
-
-  if (chatMessage && Object.keys(chatMessage).length) {
-    addMessageToCache(
-      chatMessage,
-      userMessagesCache,
-      twitchIrcCache,
-      ircCacheResourceKeys.chatMessages
-    );
-  }
-
-  const userJoinedChat = getUserJoinedChat(message);
-
-  if (userJoinedChat) {
-    addMessageToCache(
-      userJoinedChat,
-      userJoinedChatCache,
-      twitchIrcCache,
-      ircCacheResourceKeys.userJoinedChat
-    );
-  }
-
-  const userLeftChat = getUserLeftChat(message);
-
-  if (userLeftChat) {
-    addMessageToCache(
-      userLeftChat,
-      userLeftChatCache,
-      twitchIrcCache,
-      ircCacheResourceKeys.userLeftChat
-    );
-  }
+  handleGetNamesInChat(message, usersInChatCache);
+  handleGetChatMessages(message, userMessagesCache);
+  handleGetUserJoinedChat(message, userJoinedChatCache);
+  handleGetUserLeftChat(message, userLeftChatCache);
 
   return;
 }

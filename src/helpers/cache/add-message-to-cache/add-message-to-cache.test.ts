@@ -1,6 +1,7 @@
 import NodeCache from "node-cache";
 import { addMessageToCache } from "./add-message-to-cache";
-import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
+import { twitchIrcCache } from "../../../twitch-irc-cache";
+import { ircMessageObject } from "../irc-message-object/irc-message-object";
 
 jest.mock("../irc-message-object/irc-message-object", () => ({
   ircMessageObject: jest.fn(() => ({
@@ -9,7 +10,10 @@ jest.mock("../irc-message-object/irc-message-object", () => ({
   })),
 }));
 
+const mockIrcMessageObject = ircMessageObject as jest.Mock;
+
 console.error = jest.fn();
+console.log = jest.fn();
 
 describe("addMessageToCache", () => {
   let cacheInstance: NodeCache;
@@ -24,49 +28,40 @@ describe("addMessageToCache", () => {
     jest.clearAllMocks();
   });
 
-  it("should add message to cache and return true", () => {
-    const message: string = "test3";
+  const message: string = "test3";
 
-    const result = addMessageToCache(
-      message,
-      cacheData,
-      cacheInstance,
-      ircResourceKey
-    );
+  it("should add message to cache and return true", () => {
+    const result = addMessageToCache(message, cacheData, ircResourceKey);
 
     expect(result).toBeTruthy();
   });
 
   it("should add chat message object to cache and return true", () => {
-    const message: ChatMessageObject = {
-      user: "testuser",
-      message: "test message",
-    };
+    const returnMsgObj = { message, timestamp: "now" };
 
-    const result = addMessageToCache(
-      message,
-      cacheData,
-      cacheInstance,
-      ircResourceKey
-    );
+    mockIrcMessageObject.mockReturnValueOnce(returnMsgObj);
 
-    expect(result).toBeTruthy();
+    jest.spyOn(twitchIrcCache, "set").mockImplementation(() => true);
+
+    addMessageToCache(message, [], ircResourceKey);
+
+    expect(twitchIrcCache.set).toBeCalledWith(ircResourceKey, [
+      {
+        message,
+        timestamp: "now",
+      },
+    ]);
   });
 
   it("should catch and log error when cache set fails", () => {
     const message: string = "test3";
     const errorMsg = "test error";
 
-    jest.spyOn(cacheInstance, "set").mockImplementation(() => {
+    jest.spyOn(twitchIrcCache, "set").mockImplementation(() => {
       throw new Error(errorMsg);
     });
 
-    const result = addMessageToCache(
-      message,
-      cacheData,
-      cacheInstance,
-      ircResourceKey
-    );
+    const result = addMessageToCache(message, cacheData, ircResourceKey);
 
     expect(result).toBeFalsy();
   });
@@ -76,5 +71,17 @@ describe("addMessageToCache", () => {
     const result = addMessageToCache([null], [], cacheInstance, "anything");
 
     expect(result).toBeFalsy();
+  });
+
+  it("should log the cached values to console", () => {
+    addMessageToCache(message, cacheData, ircResourceKey);
+
+    expect(console.log).toBeCalledTimes(1);
+  });
+
+  it("do nothing if message is empty", () => {
+    const result = addMessageToCache("", cacheData, ircResourceKey);
+
+    expect(result).toBe(undefined);
   });
 });

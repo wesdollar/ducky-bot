@@ -1,143 +1,65 @@
-import { getChatMessage } from "./helpers/messages/get-chat-message/get-chat-message";
-import { addMessageToCache } from "./helpers/cache/add-message-to-cache/add-message-to-cache";
+import { handleGetNamesInChat } from "./handlers/handle-get-names-in-chat/handle-get-names-in-chat";
+import { handleGetChatMessages } from "./handlers/handle-get-chat-messages/handle-get-chat-messages";
+import { handleGetUserJoinedChat } from "./handlers/handle-get-user-joined-chat/handle-get-user-joined-chat";
+import { handleGetUserLeftChat } from "./handlers/handle-get-user-left-chat/handle-get-user-left-chat";
 import { handleIrcMessages } from "./handle-irc-messages";
-import { featureFlags } from "./constants/feature-flags";
 
-const string1 = "Pretty Lights is back, yo!";
-
-jest.mock("./helpers/cache/add-message-to-cache/add-message-to-cache", () => ({
-  addMessageToCache: jest.fn(),
-}));
-
-jest.mock("./helpers/messages/get-names-in-chat/get-names-in-chat", () => ({
-  getNamesInChat: jest.fn((data) => [...data]),
-}));
-
-jest.mock("./helpers/messages/get-chat-message/get-chat-message", () => ({
-  getChatMessage: jest.fn((data) => data),
-}));
+const message = "Pretty Lights is back, yo!";
 
 jest.mock(
-  "./helpers/messages/get-user-joined-chat/get-user-joined-chat",
+  "./handlers/handle-get-names-in-chat/handle-get-names-in-chat",
   () => ({
-    getUserJoinedChat: jest.fn((data) => data),
+    handleGetNamesInChat: jest.fn(),
   })
 );
 
-jest.mock("./helpers/messages/get-user-left-chat/get-user-left-chat", () => ({
-  getUserLeftChat: jest.fn((data) => data),
-}));
+jest.mock(
+  "./handlers/handle-get-chat-messages/handle-get-chat-messages",
+  () => ({
+    handleGetChatMessages: jest.fn(),
+  })
+);
 
-jest.mock("./constants/feature-flags", () => ({
-  featureFlags: { enableGetAllUsers: true },
-}));
+jest.mock(
+  "./handlers/handle-get-user-joined-chat/handle-get-user-joined-chat",
+  () => ({
+    handleGetUserJoinedChat: jest.fn(),
+  })
+);
 
-const mockGetChatMessage = getChatMessage as jest.Mock;
+jest.mock(
+  "./handlers/handle-get-user-left-chat/handle-get-user-left-chat",
+  () => ({
+    handleGetUserLeftChat: jest.fn(),
+  })
+);
 
-describe("happy path: handle irc message, strings and buffers are supports", () => {
+describe("handle irc message", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should add message to cache when we parse the users in chat on bot entry of channel", () => {
-    handleIrcMessages(string1);
+  it("should call handleGetNamesInChat with appropriate payload", () => {
+    handleIrcMessages(message);
 
-    expect(addMessageToCache).toBeCalled();
+    expect(handleGetNamesInChat).toBeCalledWith(message, []);
   });
 
-  it("get chat message when use posts to chat", () => {
-    handleIrcMessages(string1);
+  it("should call handleGetChatMessage with appropriate payload", () => {
+    handleIrcMessages(message);
 
-    expect(addMessageToCache).toBeCalled();
+    expect(handleGetChatMessages).toBeCalledWith(message, []);
   });
 
-  it("should store off to cache whenever a user joins the chat", () => {
-    handleIrcMessages(string1);
+  it("should call handleGetUserJoinedChat with appropriate payload", () => {
+    handleIrcMessages(message);
 
-    expect(addMessageToCache).toBeCalled();
+    expect(handleGetUserJoinedChat).toBeCalledWith(message, []);
   });
 
-  it("should store off to cache whenever a user leaves the chat", () => {
-    handleIrcMessages(string1);
+  it("should call handleGetUserLeftChat with appropriate payload", () => {
+    handleIrcMessages(message);
 
-    // expect(twitchIrcCache).toBeCalled();
-    expect(addMessageToCache).toBeCalled();
-  });
-});
-
-describe("when feature flag for enable get all users is set to true", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("should call addMessageToCache when feature flag enabled", () => {
-    handleIrcMessages(string1);
-
-    expect(addMessageToCache).toBeCalled();
-  });
-
-  it("should call add message to cache", () => {
-    handleIrcMessages(string1);
-
-    expect(addMessageToCache).toBeCalledTimes(4);
-  });
-});
-
-describe("when feature flag for enable get all users is set to false", () => {
-  beforeAll(() => {
-    (featureFlags as any).enableGetAllUsers = false;
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("should not call addMessageToCache when feature flag for enable get all users is set to false", () => {
-    handleIrcMessages(string1);
-
-    expect(addMessageToCache).toBeCalledTimes(3);
-  });
-});
-
-describe("unhappy path: when an empty string is returned from any of the getters, no action should be taken", () => {
-  beforeEach(() => {});
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("not call addMessageToCache when there is no string value", () => {
-    handleIrcMessages("");
-
-    expect(addMessageToCache).toBeCalledTimes(0);
-  });
-
-  it("should call add to message", () => {
-    handleIrcMessages("");
-
-    expect(addMessageToCache).toBeCalledTimes(0);
-  });
-
-  it("get chat message when use posts to chat", () => {
-    mockGetChatMessage.mockReturnValueOnce({});
-
-    handleIrcMessages("");
-
-    // expect(twitchIrcCache).toBeCalled();
-    expect(addMessageToCache).toBeCalledTimes(0);
-  });
-
-  it("should store off to cache whenever a user joins the chat", () => {
-    handleIrcMessages("");
-
-    // expect(twitchIrcCache).toBeCalled();
-    expect(addMessageToCache).toBeCalledTimes(0);
-  });
-
-  it("should store off to cache whenever a user leaves the chat", () => {
-    handleIrcMessages("");
-
-    // expect(twitchIrcCache).toBeCalled();
-    expect(addMessageToCache).toBeCalledTimes(0);
+    expect(handleGetUserLeftChat).toBeCalledWith(message, []);
   });
 });

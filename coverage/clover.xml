@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1680681691030" clover="3.2.0">
-  <project timestamp="1680681691030" name="All files">
-    <metrics statements="19" coveredstatements="19" conditionals="21" coveredconditionals="21" methods="1" coveredmethods="1" elements="41" coveredelements="41" complexity="0" loc="19" ncloc="19" packages="2" files="3" classes="3"/>
+<coverage generated="1680719126283" clover="3.2.0">
+  <project timestamp="1680719126283" name="All files">
+    <metrics statements="11" coveredstatements="11" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1" elements="20" coveredelements="20" complexity="0" loc="11" ncloc="11" packages="2" files="3" classes="3"/>
     <package name="src">
-      <metrics statements="18" coveredstatements="18" conditionals="21" coveredconditionals="21" methods="1" coveredmethods="1"/>
+      <metrics statements="10" coveredstatements="10" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
       <file name="handle-irc-messages.ts" path="/Users/postcards/Code/ducky-bot/src/handle-irc-messages.ts">
-        <metrics statements="17" coveredstatements="17" conditionals="21" coveredconditionals="21" methods="1" coveredmethods="1"/>
-        <line num="12" count="12" type="cond" truecount="2" falsecount="0"/>
-        <line num="15" count="12" type="cond" truecount="2" falsecount="0"/>
-        <line num="18" count="12" type="cond" truecount="2" falsecount="0"/>
-        <line num="21" count="12" type="cond" truecount="2" falsecount="0"/>
-        <line num="23" count="12" type="stmt"/>
-        <line num="25" count="12" type="cond" truecount="5" falsecount="0"/>
-        <line num="26" count="6" type="stmt"/>
-        <line num="34" count="12" type="stmt"/>
-        <line num="36" count="12" type="cond" truecount="4" falsecount="0"/>
-        <line num="37" count="7" type="stmt"/>
-        <line num="45" count="12" type="stmt"/>
-        <line num="47" count="12" type="cond" truecount="2" falsecount="0"/>
-        <line num="48" count="7" type="stmt"/>
-        <line num="56" count="12" type="stmt"/>
-        <line num="58" count="12" type="cond" truecount="2" falsecount="0"/>
-        <line num="59" count="7" type="stmt"/>
-        <line num="67" count="12" type="stmt"/>
+        <metrics statements="9" coveredstatements="9" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="10" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
       </file>
       <file name="twitch-irc-cache.ts" path="/Users/postcards/Code/ducky-bot/src/twitch-irc-cache.ts">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
