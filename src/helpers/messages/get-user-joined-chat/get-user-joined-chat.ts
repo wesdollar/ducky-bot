@@ -1,6 +1,6 @@
-import { logMessageTitle } from "../log-formatters/log-message-title";
+import { logMessageTitle } from "../../log-formatters/log-message-title";
 
-export const getUserJoinedChat = (message: any) => {
+export const getUserJoinedChat = (message: string) => {
   const regex = /:(\w+)!(\w+)@(\w+)\.tmi\.twitch\.tv JOIN #(\w+)/;
   const match = message.match(regex);
 
@@ -9,6 +9,8 @@ export const getUserJoinedChat = (message: any) => {
 
     logMessageTitle("user joined chat");
 
-    console.log(`user: ${user}`);
+    return user;
   }
+
+  return null;
 };

@@ -1,13 +1,21 @@
 import express from "express";
 import WebSocket from "ws";
-import * as dotenv from "dotenv";
+import * as dotenv from "dotenv-flow";
 import axios from "axios";
-import { getNamesInChat } from "./helpers/messages/get-names-in-chat";
-import { getChatMessage } from "./helpers/messages/get-chat-message";
-import { getUserJoinedChat } from "./helpers/messages/get-user-joined-chat";
-import { getUserLeftChat } from "./helpers/messages/get-user-left-chat";
+import { log } from "console";
+import { ircCacheResourceKeys } from "./constants/irc-cache-keys";
+import { errorResponse } from "./responses/error-response";
+import { httpStatusCodes } from "./constants/http-status-codes";
+import { errorKeys } from "./constants/error-keys";
+import { ircMessageObject } from "./helpers/cache/irc-message-object/irc-message-object";
+import { formatMessageContent } from "./helpers/cache/format-message-content/format-message-content";
+import { handleIrcMessages } from "./handle-irc-messages";
+import type NodeCache from "node-cache";
+import { twitchIrcCache } from "./twitch-irc-cache";
 
 dotenv.config();
+
+const incomingIrcMessageLogCache = [] as NodeCache[];
 
 const app = express();
 const port = 3000;
@@ -40,6 +48,29 @@ app.get("/ducky-cb", (req, res) => {
   return res.json({ success: "true" });
 });
 
+app.get("/twitch-irc-cache/:resourceKey", (req, res) => {
+  const { resourceKey: requestedResource } = req.params;
+  let cacheData;
+
+  if (requestedResource === ircCacheResourceKeys.ircMessages) {
+    cacheData = twitchIrcCache.get(ircCacheResourceKeys.ircMessages);
+
+    if (cacheData === undefined) {
+      return res.json(
+        errorResponse(
+          httpStatusCodes.noContent,
+          `no items in cache for key ${requestedResource}`,
+          { key: errorKeys.noItemsInCache, errorStack: {} }
+        )
+      );
+    }
+
+    return res.json(cacheData);
+  }
+
+  return res.json();
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
@@ -52,7 +83,7 @@ ws.on("connectFailed", function (error) {
   console.log(`Connect Error: ${error.toString()}`);
 });
 
-ws.on("open", function (connection) {
+ws.on("open", () => {
   console.log("WebSocket Client Connected");
 
   ws.send("CAP REQ :twitch.tv/membership twitch.tv/tags twitch.tv/commands");
@@ -62,21 +93,34 @@ ws.on("open", function (connection) {
 });
 
 ws.on("message", function (data: WebSocket.Data) {
-  let message = data;
+  let message = "";
+
+  incomingIrcMessageLogCache.push(ircMessageObject(data));
+
+  try {
+    twitchIrcCache.set(
+      ircCacheResourceKeys.ircMessages,
+      incomingIrcMessageLogCache
+    );
+  } catch (error) {
+    log(`failed to save ${ircCacheResourceKeys.ircMessages} to cache`);
+  }
 
   if (Buffer.isBuffer(data)) {
-    message = data.toString("utf8");
+    message = formatMessageContent(data.toString("utf8"));
 
-    getNamesInChat(message);
-    getChatMessage(message);
-    getUserJoinedChat(message);
-    getUserLeftChat(message);
+    return;
   }
 
   if (typeof data === "string") {
-    getNamesInChat(message);
-    getChatMessage(message);
-    getUserJoinedChat(message);
-    getUserLeftChat(message);
+    message = formatMessageContent(data);
+
+    handleIrcMessages(message);
+
+    return;
+  }
+
+  if (typeof message === "object") {
+    console.log("data is of type object");
   }
 });

@@ -1,4 +1,4 @@
-{
+	{
 	// Place your dwellby workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
 	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
 	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
@@ -20,7 +20,7 @@
 		"scope": "javascript,typescript",
 		"prefix": "log",
 		"body": [
-			"console.log('$1');",
+			"console.log($1);",
 			"$2"
 		],
 		"description": "Log output to console"
@@ -61,5 +61,43 @@
 			"console.log(JSON.stringify($1, null, 2));"
 		],
 		"description": "Creates a new React component using fat-arrow syntax."
-	}
+	},
+
+	"Jest describe block": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "jdesc",
+		"body": [
+			"describe(\"$1\", () => {$2});"
+		],
+		"description": "Creates a jest describe statement."
+	},
+
+	"Jest it block": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "jit",
+		"body": [
+			"it(\"$1\", () => {$2});"
+		],
+		"description": "Create a jest it statement."
+	},
+
+	"Jest async it block": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "jita",
+		"body": [
+			"it(\"$1\", async () => {$2});"
+		],
+		"description": "Create a jest async it statement."
+	},
+
+	"Jest Mock method/function": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "jmock",
+		"body": [
+			"jest.mock(\"$1\", () => ({",
+			"$2: jest.fn($3),",
+			"}));"
+		],
+		"description": "Create a jest async it statement."
+	},
 }

@@ -1,5 +1,19 @@
 {
-    "compilerOptions": {
-      "esModuleInterop": true,
-    },
-  }
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "types": ["jest", "node"],
+    "target": "es6",
+    "lib": ["esnext", "dom", "DOM.Iterable"],
+    "module": "CommonJS",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "allowJs": true
+  },
+  "include": ["src/**/*.ts"]
+}
