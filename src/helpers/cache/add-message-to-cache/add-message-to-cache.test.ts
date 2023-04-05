@@ -2,6 +2,15 @@ import NodeCache from "node-cache";
 import { addMessageToCache } from "./add-message-to-cache";
 import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
 
+jest.mock("../irc-message-object/irc-message-object", () => ({
+  ircMessageObject: jest.fn(() => ({
+    message: "Pretty Light is back!",
+    timestamp: "now",
+  })),
+}));
+
+console.error = jest.fn();
+
 describe("addMessageToCache", () => {
   let cacheInstance: NodeCache;
   const ircResourceKey = "test-key";
@@ -58,6 +67,13 @@ describe("addMessageToCache", () => {
       cacheInstance,
       ircResourceKey
     );
+
+    expect(result).toBeFalsy();
+  });
+
+  it("should not allow a array with an index of one that is null pass through", () => {
+    // @ts-ignore mockery
+    const result = addMessageToCache([null], [], cacheInstance, "anything");
 
     expect(result).toBeFalsy();
   });

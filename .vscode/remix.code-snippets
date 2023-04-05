@@ -100,4 +100,13 @@
 		],
 		"description": "Create a jest async it statement."
 	},
+
+	"@tsignore mockery for unit tests": {
+		"scope": "javascript,typescript,javascriptreact,typescriptreact",
+		"prefix": "tsmockery",
+		"body": [
+			"// @ts-ignore mockery"
+		],
+		"description": "Ignore next line of TS because we're mocking the data for unit testing only."
+	},
 }

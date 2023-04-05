@@ -33,7 +33,6 @@ export const formatMessageContent = (
   }
 
   if (Buffer.isBuffer(data)) {
-    console.log("hit buffer");
     message = data.toString("utf-8");
 
     return message;

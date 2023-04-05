@@ -12,6 +12,7 @@ import { formatMessageContent } from "./helpers/cache/format-message-content/for
 import { handleIrcMessages } from "./handle-irc-messages";
 import type NodeCache from "node-cache";
 import { twitchIrcCache } from "./twitch-irc-cache";
+import lodash from "lodash";
 
 dotenv.config();
 
@@ -49,30 +50,27 @@ app.get("/ducky-cb", (req, res) => {
 });
 
 app.get("/twitch-irc-cache/:resourceKey", (req, res) => {
-  const { resourceKey: requestedResource } = req.params;
-  let cacheData;
+  let { resourceKey: requestedResource } = req.params;
 
-  if (requestedResource === ircCacheResourceKeys.ircMessages) {
-    cacheData = twitchIrcCache.get(ircCacheResourceKeys.ircMessages);
+  requestedResource = lodash.camelCase(requestedResource);
 
-    if (cacheData === undefined) {
-      return res.json(
-        errorResponse(
-          httpStatusCodes.noContent,
-          `no items in cache for key ${requestedResource}`,
-          { key: errorKeys.noItemsInCache, errorStack: {} }
-        )
-      );
-    }
+  const cacheData = twitchIrcCache.get(ircCacheResourceKeys.ircMessages);
 
-    return res.json(cacheData);
+  if (cacheData === undefined) {
+    return res.json(
+      errorResponse(
+        httpStatusCodes.noContent,
+        `no items in cache for key ${requestedResource}`,
+        { key: errorKeys.noItemsInCache, errorStack: {} }
+      )
+    );
   }
 
-  return res.json();
+  return res.json(cacheData);
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`app listening on port ${port}`);
 });
 
 const ws = new WebSocket("ws://irc-ws.chat.twitch.tv:80");
@@ -95,7 +93,9 @@ ws.on("open", () => {
 ws.on("message", function (data: WebSocket.Data) {
   let message = "";
 
-  incomingIrcMessageLogCache.push(ircMessageObject(data));
+  incomingIrcMessageLogCache.push(
+    ircMessageObject(data, ircCacheResourceKeys.ircMessages)
+  );
 
   try {
     twitchIrcCache.set(
@@ -109,6 +109,8 @@ ws.on("message", function (data: WebSocket.Data) {
   if (Buffer.isBuffer(data)) {
     message = formatMessageContent(data.toString("utf8"));
 
+    handleIrcMessages(message);
+
     return;
   }
 
@@ -121,6 +123,7 @@ ws.on("message", function (data: WebSocket.Data) {
   }
 
   if (typeof message === "object") {
+    console.log("object");
     console.log("data is of type object");
   }
 });

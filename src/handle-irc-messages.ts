@@ -6,23 +6,19 @@ import { ircCacheResourceKeys } from "./constants/irc-cache-keys";
 import { addMessageToCache } from "./helpers/cache/add-message-to-cache/add-message-to-cache";
 import { twitchIrcCache } from "./twitch-irc-cache";
 
-const userJoinedChatCache = twitchIrcCache.get(
-  ircCacheResourceKeys.userJoinedChat
-) as [];
-
-const userLeftChatCache = twitchIrcCache.get(
-  ircCacheResourceKeys.userLeftChat
-) as [];
-
-const userMessagesCache = twitchIrcCache.get(
-  ircCacheResourceKeys.chatMessages
-) as [];
-
-const usersInChatCache = twitchIrcCache.get(
-  ircCacheResourceKeys.usersInChat
-) as [];
-
 export function handleIrcMessages(message: string) {
+  const userJoinedChatCache =
+    (twitchIrcCache.get(ircCacheResourceKeys.userJoinedChat) as []) || [];
+
+  const userLeftChatCache =
+    (twitchIrcCache.get(ircCacheResourceKeys.userLeftChat) as []) || [];
+
+  const userMessagesCache =
+    (twitchIrcCache.get(ircCacheResourceKeys.chatMessages) as []) || [];
+
+  const usersInChatCache =
+    (twitchIrcCache.get(ircCacheResourceKeys.usersInChat) as []) || [];
+
   const usersInChat = getNamesInChat(message) as [];
 
   if (usersInChat && usersInChat.length) {

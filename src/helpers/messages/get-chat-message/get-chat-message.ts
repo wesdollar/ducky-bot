@@ -1,3 +1,4 @@
+import { formatMessageContent } from "../../cache/format-message-content/format-message-content";
 import { logMessageTitle } from "../../log-formatters/log-message-title";
 
 export interface ChatMessageObject {
@@ -9,17 +10,20 @@ export const getChatMessage = (
   message: string
 ): ChatMessageObject | undefined => {
   try {
-    const regex = /^:([^!]+).+:(.*)$/;
-    const matches = message.match(regex);
+    const regex = /:(.+?)!(.*?)\sPRIVMSG\s#dollardojo\s:(.*)/;
+    const match = message.match(regex);
 
-    if (matches) {
-      const [, username, messageText] = matches;
+    if (match) {
+      const [, username, , messageText] = match;
 
       logMessageTitle("chat message received");
 
-      return { user: username as string, message: messageText as string };
+      return {
+        user: username as string,
+        message: formatMessageContent(messageText),
+      };
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

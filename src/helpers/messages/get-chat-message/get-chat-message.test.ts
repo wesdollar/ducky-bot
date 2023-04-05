@@ -10,9 +10,9 @@ const message1 = "bleedPurple";
 const message2 =
   "a full sentence to make sure that we are getting the entire thing out of our regex";
 
-const simpleString = `:${username}!${username}@${username}.tmi.twitch.tv PRIVMSG #bar :${message1}`;
+const simpleString = `:${username}!${username}@${username}.tmi.twitch.tv PRIVMSG #dollardojo :${message1}`;
 
-const complexString = `:${username}!${username}@${username}.tmi.twitch.tv PRIVMSG #bar :${message2}`;
+const complexString = `:${username}!${username}@${username}.tmi.twitch.tv PRIVMSG #dollardojo :${message2}`;
 
 describe("get chat messages", () => {
   it("should return an object with a user and message property on a simple, one-word message", () => {
