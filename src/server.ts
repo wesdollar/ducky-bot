@@ -15,16 +15,43 @@ import { twitchIrcCache } from "./twitch-irc-cache";
 import { persistUserChatMessage } from "./handlers/db/persis-user-chat-message/persist-user-chat-message";
 import { persistUserJoinedChat } from "./handlers/db/persist-user-joined-chat/persist-user-joined-chat";
 import { persisUserLeftChat } from "./handlers/db/persis-user-left-chat/persist-user-left-chat";
+import { Server } from "socket.io";
+import type {
+  ClientToServerEvents,
+  SocketData,
+  InterServerEvents,
+  ServerToClientEvents,
+} from "./types/socket-io";
+import cors from "cors";
+import { createServer } from "http";
 
 dotenv.config();
 
 const incomingIrcMessageLogCache = [] as NodeCache[];
 
 const app = express();
-const port = 3000;
+const httpServer = createServer(app);
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+
+const port = 3001;
+
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.json("Hello World!");
+});
+
+app.get("/cors-test", (req, res) => {
+  return res.json({ messaage: "Hello, Chat!" });
 });
 
 app.get("/validate", async (req, res) => {
@@ -127,10 +154,6 @@ app.get("/cron-jobs/persist-to-db/:resourceKey", (req, res) => {
   return res.json({ success: true });
 });
 
-app.listen(port, () => {
-  console.log(`app listening on port ${port}`);
-});
-
 const ws = new WebSocket("ws://irc-ws.chat.twitch.tv:80");
 
 console.log("Connecting to Twitch IRC...");
@@ -182,3 +205,17 @@ ws.on("message", function (data: WebSocket.Data) {
     console.log("data is of type object");
   }
 });
+
+io.on("connection", (socket) => {
+  socket.on("hello", () => {
+    console.log("hello received");
+  });
+
+  socket.on("world", () => {
+    console.log("world received");
+
+    socket.emit("caasi", "dev");
+  });
+});
+
+httpServer.listen(port);
