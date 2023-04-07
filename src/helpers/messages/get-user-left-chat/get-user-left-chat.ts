@@ -1,3 +1,4 @@
+import { ircResourceKeys } from "../../../constants/irc-resource-keys";
 import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 
 export const getUserLeftChat = (message: string) => {
@@ -7,7 +8,7 @@ export const getUserLeftChat = (message: string) => {
   if (match) {
     const [, user] = match;
 
-    logIncomingMessageTitle("user left chat");
+    logIncomingMessageTitle("user left chat", ircResourceKeys.userLeftChat);
 
     return user;
   }

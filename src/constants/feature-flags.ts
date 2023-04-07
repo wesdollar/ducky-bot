@@ -1,11 +1,9 @@
 import { ircResourceKeys } from "./irc-resource-keys";
 
 export const featureFlags = {
+  allowLogToConsole: true,
   [ircResourceKeys.chatMessages]: {
     logToConsole: true,
-  },
-  [ircResourceKeys.usersInChat]: {
-    logToConsole: false,
   },
   [ircResourceKeys.userJoinedChat]: {
     logToConsole: false,

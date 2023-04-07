@@ -21,6 +21,7 @@ jest.mock(
 
 const message = "hi";
 const getUserLeftChatReturnObj = { message, timestamp: "now" };
+const io = jest.fn();
 
 describe("handle get user left chat", () => {
   afterEach(() => {
@@ -30,19 +31,20 @@ describe("handle get user left chat", () => {
   it("it should call add message to cache with correct payload", () => {
     mockGetUserLeftChat.mockReturnValue(getUserLeftChatReturnObj);
 
-    handleGetUserLeftChat(message, []);
+    handleGetUserLeftChat(message, [], io);
 
     expect(addMessageToCache).toBeCalledWith(
       getUserLeftChatReturnObj,
       [],
-      ircResourceKeys.userLeftChat
+      ircResourceKeys.userLeftChat,
+      io
     );
   });
 
   it("should not call addMessageToCache when userLeftChat is empty", () => {
     mockGetUserLeftChat.mockReturnValue(undefined);
 
-    handleGetUserLeftChat(message, []);
+    handleGetUserLeftChat(message, [], io);
 
     expect(addMessageToCache).toBeCalledTimes(0);
   });

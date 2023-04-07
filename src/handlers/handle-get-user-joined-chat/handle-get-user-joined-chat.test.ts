@@ -18,6 +18,7 @@ jest.mock(
   })
 );
 
+const io = jest.fn();
 const mockGetUserJoinedChat = getUserJoinedChat as jest.Mock;
 
 jest.mock(
@@ -39,20 +40,21 @@ describe("handle get user joined chat", () => {
   it("should store off to cache whenever a user joins the chat", () => {
     mockGetUserJoinedChat.mockReturnValue(mockUserJoinedChatObj);
 
-    handleGetUserJoinedChat(string1, []);
+    handleGetUserJoinedChat(string1, [], io);
 
     expect(addMessageToCache).toBeCalled();
     expect(addMessageToCache).toBeCalledWith(
       mockUserJoinedChatObj,
       [],
-      ircResourceKeys.userJoinedChat
+      ircResourceKeys.userJoinedChat,
+      io
     );
   });
 
   it("should not call addMessageToCache when userJoinedChat has no value", () => {
     mockGetUserJoinedChat.mockReturnValue(undefined);
 
-    handleGetUserJoinedChat(string1, []);
+    handleGetUserJoinedChat(string1, [], io);
 
     expect(addMessageToCache).toBeCalledTimes(0);
   });

@@ -1,13 +1,15 @@
 import { featureFlags } from "../../constants/feature-flags";
-import { ircResourceKeys } from "../../constants/irc-resource-keys";
 
 export const logIncomingMessageTitle = (
   messageDescription: string,
-  allowLogToConsole = true
+  ircResourceKey = "chat-message"
 ) => {
+  // @ts-ignore TODO: figure out this typing
   if (
-    allowLogToConsole &&
-    featureFlags[ircResourceKeys.chatMessages].logToConsole
+    featureFlags.allowLogToConsole &&
+    // TODO: ask for help on this
+    // @ts-ignore buzz off Typescript
+    featureFlags[ircResourceKey].logToConsole
   ) {
     console.log(`\n:: ${messageDescription} ::`);
   }

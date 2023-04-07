@@ -49,10 +49,6 @@ app.get("/", (req, res) => {
   res.json("Hello World!");
 });
 
-app.get("/cors-test", (req, res) => {
-  return res.json({ messaage: "Hello, Chat!" });
-});
-
 app.get("/validate", async (req, res) => {
   try {
     const response = await axios.get("https://id.twitch.tv/oauth2/validate", {

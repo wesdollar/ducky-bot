@@ -12,6 +12,7 @@ jest.mock("../../helpers/messages/get-chat-message/get-chat-message", () => ({
 }));
 
 const mockGetChatMessage = getChatMessage as jest.Mock;
+const io = jest.fn();
 
 jest.mock(
   "../../helpers/cache/add-message-to-cache/add-message-to-cache",
@@ -28,13 +29,13 @@ describe("handle get chat messages", () => {
   });
 
   it("get chat message when use posts to chat", () => {
-    handleGetChatMessages(message, []);
+    handleGetChatMessages(message, [], io);
 
     expect(addMessageToCache).toBeCalled();
   });
 
   it("it should get chat message", () => {
-    handleGetChatMessages(message, []);
+    handleGetChatMessages(message, [], io);
 
     expect(getChatMessage).toBeCalled();
   });
@@ -50,17 +51,18 @@ describe("when data should persist", () => {
 
     mockGetChatMessage.mockReturnValueOnce(messageObj);
 
-    handleGetChatMessages("hi", []);
+    handleGetChatMessages("hi", [], io);
 
     expect(addMessageToCache).toBeCalledWith(
       messageObj,
       [],
-      ircResourceKeys.chatMessages
+      ircResourceKeys.chatMessages,
+      io
     );
   });
 
   it("should not call addMessageToCache when string is empty", () => {
-    handleGetChatMessages("", []);
+    handleGetChatMessages("", [], io);
 
     expect(addMessageToCache).toBeCalledTimes(0);
   });
@@ -70,7 +72,7 @@ describe("when data should persist", () => {
 
     mockGetChatMessage.mockReturnValueOnce(messageObj);
 
-    handleGetChatMessages("", []);
+    handleGetChatMessages("", [], io);
 
     expect(addMessageToCache).toBeCalledTimes(0);
   });

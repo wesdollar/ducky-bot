@@ -13,6 +13,16 @@ jest.mock("../irc-message-object/irc-message-object", () => ({
 
 const mockIrcMessageObject = ircMessageObject as jest.Mock;
 
+const mockEmit = jest.fn() as jest.Mock;
+
+const io = {
+  sockets: {
+    set: jest.fn(),
+    emit: jest.fn(),
+    get: jest.fn(),
+  },
+};
+
 console.error = jest.fn();
 console.log = jest.fn();
 
@@ -34,7 +44,15 @@ describe("addMessageToCache", () => {
   const message: string = "test3";
 
   it("should add message to cache and return true", () => {
-    const result = addMessageToCache(message, cacheData, ircResourceKey);
+    const returnMsgObj = { message, timestamp: "now" };
+
+    mockEmit.mockResolvedValueOnce(true);
+
+    mockIrcMessageObject.mockReturnValueOnce(returnMsgObj);
+
+    jest.spyOn(twitchIrcCache, "get").mockImplementation(() => true);
+
+    const result = addMessageToCache(message, cacheData, ircResourceKey, io);
 
     expect(result).toBeTruthy();
   });
@@ -46,7 +64,7 @@ describe("addMessageToCache", () => {
 
     jest.spyOn(twitchIrcCache, "set").mockImplementation(() => true);
 
-    addMessageToCache(message, [], ircResourceKey);
+    addMessageToCache(message, [], ircResourceKey, io);
 
     expect(twitchIrcCache.set).toBeCalledWith(ircResourceKey, [
       {
@@ -64,7 +82,7 @@ describe("addMessageToCache", () => {
       throw new Error(errorMsg);
     });
 
-    const result = addMessageToCache(message, cacheData, ircResourceKey);
+    const result = addMessageToCache(message, cacheData, ircResourceKey, io);
 
     expect(result).toBeFalsy();
   });
@@ -77,13 +95,13 @@ describe("addMessageToCache", () => {
   });
 
   it("should log the cached values to console", () => {
-    addMessageToCache(message, cacheData, ircResourceKey);
+    addMessageToCache(message, cacheData, ircResourceKey, io);
 
     expect(console.log).toBeCalledTimes(1);
   });
 
   it("do nothing if message is empty", () => {
-    const result = addMessageToCache("", cacheData, ircResourceKey);
+    const result = addMessageToCache("", cacheData, ircResourceKey, io);
 
     expect(result).toBe(undefined);
   });

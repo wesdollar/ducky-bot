@@ -20,4 +20,10 @@ describe("get user joined chat session", () => {
 
     expect(logIncomingMessageTitle).toBeCalled();
   });
+
+  it("should not match on string that does not match the regex pattern", () => {
+    const result = getUserJoinedChat("this is my new string");
+
+    expect(result).toBe(null);
+  });
 });
