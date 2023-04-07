@@ -30,11 +30,11 @@ export const addMessageToCache = (
         `\n\n${ircResourceKey} cache data:\n`,
         JSON.stringify(twitchIrcCache.get(ircResourceKey), null, 2)
       );
-    }
 
-    io.sockets.emit("caasi", {
-      message: twitchIrcCache.get(ircResourceKey),
-    });
+      io.sockets.emit("get-cache", {
+        data: twitchIrcCache.get(ircResourceKey),
+      });
+    }
 
     return true;
   } catch (error) {

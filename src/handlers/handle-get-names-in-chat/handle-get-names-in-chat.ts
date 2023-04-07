@@ -4,7 +4,8 @@ import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-
 
 export function handleGetNamesInChat(
   message: string,
-  usersInChatCache: string[]
+  usersInChatCache: string[],
+  io: any
 ) {
   const usersInChat = getNamesInChat(message) as [];
 
@@ -12,7 +13,8 @@ export function handleGetNamesInChat(
     addMessageToCache(
       usersInChat,
       usersInChatCache,
-      ircResourceKeys.usersInChat
+      ircResourceKeys.usersInChat,
+      io
     );
   }
 }

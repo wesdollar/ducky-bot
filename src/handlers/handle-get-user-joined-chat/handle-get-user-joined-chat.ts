@@ -4,7 +4,8 @@ import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-
 
 export function handleGetUserJoinedChat(
   message: string,
-  userJoinedChatCache: []
+  userJoinedChatCache: [],
+  io: any
 ) {
   const userJoinedChat = getUserJoinedChat(message);
 
@@ -12,7 +13,8 @@ export function handleGetUserJoinedChat(
     addMessageToCache(
       userJoinedChat,
       userJoinedChatCache,
-      ircResourceKeys.userJoinedChat
+      ircResourceKeys.userJoinedChat,
+      io
     );
   }
 }

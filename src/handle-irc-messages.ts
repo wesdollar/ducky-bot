@@ -18,10 +18,10 @@ export function handleIrcMessages(message: string, io: any) {
   const usersInChatCache =
     (twitchIrcCache.get(ircResourceKeys.usersInChat) as []) || [];
 
-  // handleGetNamesInChat(message, usersInChatCache);
+  handleGetNamesInChat(message, usersInChatCache, io);
   handleGetChatMessages(message, userMessagesCache, io);
-  // handleGetUserJoinedChat(message, userJoinedChatCache);
-  // handleGetUserLeftChat(message, userLeftChatCache);
+  handleGetUserJoinedChat(message, userJoinedChatCache, io);
+  handleGetUserLeftChat(message, userLeftChatCache, io);
 
   return;
 }
