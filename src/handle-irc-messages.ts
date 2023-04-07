@@ -5,7 +5,7 @@ import { handleGetChatMessages } from "./handlers/handle-get-chat-messages/handl
 import { handleGetUserJoinedChat } from "./handlers/handle-get-user-joined-chat/handle-get-user-joined-chat";
 import { handleGetUserLeftChat } from "./handlers/handle-get-user-left-chat/handle-get-user-left-chat";
 
-export function handleIrcMessages(message: string) {
+export function handleIrcMessages(message: string, io: any) {
   const userJoinedChatCache =
     (twitchIrcCache.get(ircResourceKeys.userJoinedChat) as []) || [];
 
@@ -18,10 +18,10 @@ export function handleIrcMessages(message: string) {
   const usersInChatCache =
     (twitchIrcCache.get(ircResourceKeys.usersInChat) as []) || [];
 
-  handleGetNamesInChat(message, usersInChatCache);
-  handleGetChatMessages(message, userMessagesCache);
-  handleGetUserJoinedChat(message, userJoinedChatCache);
-  handleGetUserLeftChat(message, userLeftChatCache);
+  // handleGetNamesInChat(message, usersInChatCache);
+  handleGetChatMessages(message, userMessagesCache, io);
+  // handleGetUserJoinedChat(message, userJoinedChatCache);
+  // handleGetUserLeftChat(message, userLeftChatCache);
 
   return;
 }

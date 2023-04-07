@@ -6,7 +6,8 @@ import { featureFlags } from "../../../constants/feature-flags";
 export const addMessageToCache = (
   message: string | string[] | ChatMessageObject,
   cacheData: unknown[],
-  ircResourceKey: string
+  ircResourceKey: string,
+  io: any
   // eslint-disable-next-line max-params
 ) => {
   if (!message) {
@@ -30,6 +31,10 @@ export const addMessageToCache = (
         JSON.stringify(twitchIrcCache.get(ircResourceKey), null, 2)
       );
     }
+
+    io.sockets.emit("caasi", {
+      message: twitchIrcCache.get(ircResourceKey),
+    });
 
     return true;
   } catch (error) {

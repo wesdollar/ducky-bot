@@ -15,6 +15,8 @@ import { twitchIrcCache } from "./twitch-irc-cache";
 import { persistUserChatMessage } from "./handlers/db/persis-user-chat-message/persist-user-chat-message";
 import { persistUserJoinedChat } from "./handlers/db/persist-user-joined-chat/persist-user-joined-chat";
 import { persisUserLeftChat } from "./handlers/db/persis-user-left-chat/persist-user-left-chat";
+import cors from "cors";
+import { createServer } from "http";
 import { Server } from "socket.io";
 import type {
   ClientToServerEvents,
@@ -22,13 +24,10 @@ import type {
   InterServerEvents,
   ServerToClientEvents,
 } from "./types/socket-io";
-import cors from "cors";
-import { createServer } from "http";
 
 dotenv.config();
 
 const incomingIrcMessageLogCache = [] as NodeCache[];
-
 const app = express();
 const httpServer = createServer(app);
 const io = new Server<
@@ -187,7 +186,7 @@ ws.on("message", function (data: WebSocket.Data) {
   if (Buffer.isBuffer(data)) {
     message = formatMessageContent(data.toString("utf8"));
 
-    handleIrcMessages(message);
+    handleIrcMessages(message, io);
 
     return;
   }
@@ -195,7 +194,7 @@ ws.on("message", function (data: WebSocket.Data) {
   if (typeof data === "string") {
     message = formatMessageContent(data);
 
-    handleIrcMessages(message);
+    handleIrcMessages(message, io);
 
     return;
   }
@@ -213,8 +212,6 @@ io.on("connection", (socket) => {
 
   socket.on("world", () => {
     console.log("world received");
-
-    socket.emit("caasi", "dev");
   });
 });
 
