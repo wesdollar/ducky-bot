@@ -1,5 +1,5 @@
 import { logMessageContent } from "../../log-formatters/log-message-content";
-import { logMessageTitle } from "../../log-formatters/log-message-title";
+import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 import type WebSocket from "ws";
 import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
 
@@ -65,7 +65,7 @@ export const formatMessageContent = (
     }
   }
 
-  logMessageTitle(`format message content error`);
+  logIncomingMessageTitle(`format message content error`);
   logMessageContent(`data is of type ${typeof data} and could not be matched`);
   console.log("unparsed message: ", data);
 

@@ -1,4 +1,4 @@
-import { logMessageTitle } from "../../log-formatters/log-message-title";
+import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 
 export const getUserLeftChat = (message: string) => {
   const regex = /:(\w+)!(\w+)@(\w+)\.tmi\.twitch\.tv PART #(\w+)/;
@@ -7,7 +7,7 @@ export const getUserLeftChat = (message: string) => {
   if (match) {
     const [, user] = match;
 
-    logMessageTitle("user left chat");
+    logIncomingMessageTitle("user left chat");
 
     return user;
   }

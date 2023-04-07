@@ -3,7 +3,7 @@ import WebSocket from "ws";
 import * as dotenv from "dotenv-flow";
 import axios from "axios";
 import { log } from "console";
-import { ircCacheResourceKeys } from "./constants/irc-cache-keys";
+import { ircResourceKeys } from "./constants/irc-resource-keys";
 import { errorResponse } from "./responses/error-response";
 import { httpStatusCodes } from "./constants/http-status-codes";
 import { errorKeys } from "./constants/error-keys";
@@ -12,6 +12,9 @@ import { formatMessageContent } from "./helpers/cache/format-message-content/for
 import { handleIrcMessages } from "./handle-irc-messages";
 import type NodeCache from "node-cache";
 import { twitchIrcCache } from "./twitch-irc-cache";
+import { persistUserChatMessage } from "./handlers/db/persis-user-chat-message/persist-user-chat-message";
+import { persistUserJoinedChat } from "./handlers/db/persist-user-joined-chat/persist-user-joined-chat";
+import { persisUserLeftChat } from "./handlers/db/persis-user-left-chat/persist-user-left-chat";
 
 dotenv.config();
 
@@ -65,6 +68,65 @@ app.get("/twitch-irc-cache/:resourceKey", (req, res) => {
   return res.json(cacheData);
 });
 
+export interface IrcUserMessage {
+  message: {
+    message: string;
+    user: string;
+  };
+  timestamp: string;
+}
+
+app.get("/cron-jobs/persist-to-db/:resourceKey", (req, res) => {
+  const { resourceKey: requestedResource } = req.params;
+  let cacheData = twitchIrcCache.get(requestedResource) as [] | undefined;
+
+  if (cacheData === undefined) {
+    return res.json(
+      errorResponse(
+        httpStatusCodes.noContent,
+        `no items in cache for key ${requestedResource}`,
+        { key: errorKeys.noItemsInCache, errorStack: {} }
+      )
+    );
+  }
+
+  switch (requestedResource) {
+    case ircResourceKeys.chatMessages:
+      try {
+        persistUserChatMessage(cacheData);
+        twitchIrcCache.del(ircResourceKeys.chatMessages);
+      } catch (error) {
+        return res.json({ success: false, error });
+      }
+      break;
+    case ircResourceKeys.userJoinedChat:
+      try {
+        persistUserJoinedChat(cacheData);
+        twitchIrcCache.del(ircResourceKeys.userJoinedChat);
+      } catch (error) {
+        return res.json({ success: false, error });
+      }
+      break;
+    case ircResourceKeys.userLeftChat:
+      try {
+        persisUserLeftChat(cacheData);
+        twitchIrcCache.del(ircResourceKeys.userLeftChat);
+      } catch (error) {
+        return res.json({ success: false, error });
+      }
+      break;
+    default:
+      cacheData = undefined;
+      break;
+  }
+
+  if (!cacheData) {
+    return res.json({ success: false });
+  }
+
+  return res.json({ success: true });
+});
+
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
 });
@@ -90,16 +152,13 @@ ws.on("message", function (data: WebSocket.Data) {
   let message = "";
 
   incomingIrcMessageLogCache.push(
-    ircMessageObject(data, ircCacheResourceKeys.ircMessages)
+    ircMessageObject(data, ircResourceKeys.ircMessages)
   );
 
   try {
-    twitchIrcCache.set(
-      ircCacheResourceKeys.ircMessages,
-      incomingIrcMessageLogCache
-    );
+    twitchIrcCache.set(ircResourceKeys.ircMessages, incomingIrcMessageLogCache);
   } catch (error) {
-    log(`failed to save ${ircCacheResourceKeys.ircMessages} to cache`);
+    log(`failed to save ${ircResourceKeys.ircMessages} to cache`);
   }
 
   if (Buffer.isBuffer(data)) {

@@ -1,5 +1,4 @@
-// import type WebSocket from "ws";
-import { ircCacheResourceKeys } from "../../../constants/irc-cache-keys";
+import { ircResourceKeys } from "../../../constants/irc-resource-keys";
 import { getTimestamp } from "../../dates/get-timestamp";
 import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
 import type WebSocket from "ws";
@@ -16,22 +15,22 @@ export const ircMessageObject = (
   ircResourceKey: string
 ): any => {
   switch (ircResourceKey) {
-    case ircCacheResourceKeys.chatMessages:
+    case ircResourceKeys.chatMessages:
       return {
         message: data,
         timestamp: getTimestamp(),
       };
-    case ircCacheResourceKeys.userJoinedChat:
+    case ircResourceKeys.userJoinedChat:
       return {
         user: data,
         timestamp: getTimestamp(),
       };
-    case ircCacheResourceKeys.userLeftChat:
+    case ircResourceKeys.userLeftChat:
       return {
         user: data,
         timestamp: getTimestamp(),
       };
-    case ircCacheResourceKeys.usersInChat:
+    case ircResourceKeys.usersInChat:
       return {
         users: data,
         timestamp: getTimestamp(),

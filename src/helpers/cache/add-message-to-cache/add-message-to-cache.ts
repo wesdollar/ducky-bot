@@ -1,6 +1,7 @@
 import { ircMessageObject } from "../irc-message-object/irc-message-object";
 import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
 import { twitchIrcCache } from "../../../twitch-irc-cache";
+import { featureFlags } from "../../../constants/feature-flags";
 
 export const addMessageToCache = (
   message: string | string[] | ChatMessageObject,
@@ -22,10 +23,13 @@ export const addMessageToCache = (
   try {
     twitchIrcCache.set(ircResourceKey, updatedCache);
 
-    console.log(
-      `\n\n${ircResourceKey} cache data:\n`,
-      JSON.stringify(twitchIrcCache.get(ircResourceKey), null, 2)
-    );
+    // @ts-ignore fuck off
+    if (featureFlags[ircResourceKey].logToConsole) {
+      console.log(
+        `\n\n${ircResourceKey} cache data:\n`,
+        JSON.stringify(twitchIrcCache.get(ircResourceKey), null, 2)
+      );
+    }
 
     return true;
   } catch (error) {

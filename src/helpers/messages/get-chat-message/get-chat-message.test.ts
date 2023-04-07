@@ -1,8 +1,8 @@
-import { logMessageTitle } from "../../log-formatters/log-message-title";
+import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 import { getChatMessage } from "./get-chat-message";
 
 jest.mock("../../log-formatters/log-message-title", () => ({
-  logMessageTitle: jest.fn(),
+  logIncomingMessageTitle: jest.fn(),
 }));
 
 const username = "dollardojo";
@@ -36,6 +36,9 @@ describe("get chat messages", () => {
   it("called logMessageTitle", () => {
     getChatMessage(complexString);
 
-    expect(logMessageTitle).toBeCalled();
+    expect(logIncomingMessageTitle).toBeCalled();
   });
+
+  // 0-18;first-msg=0;flags=;id=e51b86af-e9ad-457d-afa8-287f283e5ee6;mod=0;returning-chatter=0;room-id=889699487;subscriber=1;tmi-sent-ts=1680725769195;turbo=0;user-id=889699487;user-type= :dollardojo
+  // it should not regex match on the above string
 });

@@ -1,5 +1,5 @@
 import { getUserJoinedChat } from "../../helpers/messages/get-user-joined-chat/get-user-joined-chat";
-import { ircCacheResourceKeys } from "../../constants/irc-cache-keys";
+import { ircResourceKeys } from "../../constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 
 export function handleGetUserJoinedChat(
@@ -12,7 +12,7 @@ export function handleGetUserJoinedChat(
     addMessageToCache(
       userJoinedChat,
       userJoinedChatCache,
-      ircCacheResourceKeys.userJoinedChat
+      ircResourceKeys.userJoinedChat
     );
   }
 }

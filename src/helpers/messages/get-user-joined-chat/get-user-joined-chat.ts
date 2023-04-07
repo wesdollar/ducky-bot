@@ -1,4 +1,6 @@
-import { logMessageTitle } from "../../log-formatters/log-message-title";
+import { featureFlags } from "../../../constants/feature-flags";
+import { ircResourceKeys } from "../../../constants/irc-resource-keys";
+import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 
 export const getUserJoinedChat = (message: string) => {
   const regex = /:(\w+)!(\w+)@(\w+)\.tmi\.twitch\.tv JOIN #(\w+)/;
@@ -7,7 +9,10 @@ export const getUserJoinedChat = (message: string) => {
   if (match) {
     const [, user] = match;
 
-    logMessageTitle("user joined chat");
+    logIncomingMessageTitle(
+      "user joined chat",
+      featureFlags[ircResourceKeys.userJoinedChat].logToConsole
+    );
 
     return user;
   }

@@ -2,6 +2,7 @@ import NodeCache from "node-cache";
 import { addMessageToCache } from "./add-message-to-cache";
 import { twitchIrcCache } from "../../../twitch-irc-cache";
 import { ircMessageObject } from "../irc-message-object/irc-message-object";
+import { ircResourceKeys } from "../../../constants/irc-resource-keys";
 
 jest.mock("../irc-message-object/irc-message-object", () => ({
   ircMessageObject: jest.fn(() => ({
@@ -17,7 +18,7 @@ console.log = jest.fn();
 
 describe("addMessageToCache", () => {
   let cacheInstance: NodeCache;
-  const ircResourceKey = "test-key";
+  const ircResourceKey = ircResourceKeys.chatMessages;
   const cacheData = ["test1", "test2"];
 
   beforeEach(() => {

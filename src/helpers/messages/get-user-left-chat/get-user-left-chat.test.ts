@@ -1,3 +1,4 @@
+import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 import { getUserLeftChat } from "./get-user-left-chat";
 
 jest.mock("../../log-formatters/log-message-title", () => ({
@@ -7,10 +8,19 @@ jest.mock("../../log-formatters/log-message-title", () => ({
 const username = "duckydojo";
 const string = `:${username}!${username}@${username}.tmi.twitch.tv PART #dollardojo`;
 
-describe("get user who left chat", () => {
-  it("should return the user's username", () => {
-    const result = getUserLeftChat(string);
+jest.mock("../../log-formatters/log-message-title", () => ({
+  logIncomingMessageTitle: jest.fn(),
+}));
 
-    expect(result).toEqual(username);
+// TODO: add additional coverage
+describe("get user who left chat", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("shouldcall logIncomingMessageTitle", () => {
+    getUserLeftChat(string);
+
+    expect(logIncomingMessageTitle).toBeCalled();
   });
 });

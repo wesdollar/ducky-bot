@@ -1,5 +1,5 @@
 import { getChatMessage } from "../../helpers/messages/get-chat-message/get-chat-message";
-import { ircCacheResourceKeys } from "../../constants/irc-cache-keys";
+import { ircResourceKeys } from "../../constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 
 export function handleGetChatMessages(message: string, userMessagesCache: []) {
@@ -9,7 +9,7 @@ export function handleGetChatMessages(message: string, userMessagesCache: []) {
     addMessageToCache(
       chatMessage,
       userMessagesCache,
-      ircCacheResourceKeys.chatMessages
+      ircResourceKeys.chatMessages
     );
   }
 }

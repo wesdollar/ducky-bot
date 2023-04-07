@@ -1,5 +1,5 @@
 import { getChatMessage } from "../../helpers/messages/get-chat-message/get-chat-message";
-import { ircCacheResourceKeys } from "../../constants/irc-cache-keys";
+import { ircResourceKeys } from "../../constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 import { handleGetChatMessages } from "./handle-get-chat-messages";
 
@@ -55,7 +55,7 @@ describe("when data should persist", () => {
     expect(addMessageToCache).toBeCalledWith(
       messageObj,
       [],
-      ircCacheResourceKeys.chatMessages
+      ircResourceKeys.chatMessages
     );
   });
 

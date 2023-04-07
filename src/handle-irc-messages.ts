@@ -1,4 +1,4 @@
-import { ircCacheResourceKeys } from "./constants/irc-cache-keys";
+import { ircResourceKeys } from "./constants/irc-resource-keys";
 import { twitchIrcCache } from "./twitch-irc-cache";
 import { handleGetNamesInChat } from "./handlers/handle-get-names-in-chat/handle-get-names-in-chat";
 import { handleGetChatMessages } from "./handlers/handle-get-chat-messages/handle-get-chat-messages";
@@ -7,16 +7,16 @@ import { handleGetUserLeftChat } from "./handlers/handle-get-user-left-chat/hand
 
 export function handleIrcMessages(message: string) {
   const userJoinedChatCache =
-    (twitchIrcCache.get(ircCacheResourceKeys.userJoinedChat) as []) || [];
+    (twitchIrcCache.get(ircResourceKeys.userJoinedChat) as []) || [];
 
   const userLeftChatCache =
-    (twitchIrcCache.get(ircCacheResourceKeys.userLeftChat) as []) || [];
+    (twitchIrcCache.get(ircResourceKeys.userLeftChat) as []) || [];
 
   const userMessagesCache =
-    (twitchIrcCache.get(ircCacheResourceKeys.chatMessages) as []) || [];
+    (twitchIrcCache.get(ircResourceKeys.chatMessages) as []) || [];
 
   const usersInChatCache =
-    (twitchIrcCache.get(ircCacheResourceKeys.usersInChat) as []) || [];
+    (twitchIrcCache.get(ircResourceKeys.usersInChat) as []) || [];
 
   handleGetNamesInChat(message, usersInChatCache);
   handleGetChatMessages(message, userMessagesCache);

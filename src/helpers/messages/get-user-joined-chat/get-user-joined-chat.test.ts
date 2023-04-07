@@ -1,8 +1,8 @@
-import { logMessageTitle } from "../../log-formatters/log-message-title";
+import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 import { getUserJoinedChat } from "./get-user-joined-chat";
 
 jest.mock("../../log-formatters/log-message-title", () => ({
-  logMessageTitle: jest.fn(),
+  logIncomingMessageTitle: jest.fn(),
 }));
 
 const username = "duckydojo";
@@ -18,6 +18,6 @@ describe("get user joined chat session", () => {
   it("should call logMessageTitle", () => {
     getUserJoinedChat(string);
 
-    expect(logMessageTitle).toBeCalled();
+    expect(logIncomingMessageTitle).toBeCalled();
   });
 });

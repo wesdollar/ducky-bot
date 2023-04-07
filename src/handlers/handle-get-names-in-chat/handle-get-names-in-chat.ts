@@ -1,7 +1,6 @@
 import { getNamesInChat } from "../../helpers/messages/get-names-in-chat/get-names-in-chat";
-import { ircCacheResourceKeys } from "../../constants/irc-cache-keys";
+import { ircResourceKeys } from "../../constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
-import { featureFlags } from "../../constants/feature-flags";
 
 export function handleGetNamesInChat(
   message: string,
@@ -9,11 +8,11 @@ export function handleGetNamesInChat(
 ) {
   const usersInChat = getNamesInChat(message) as [];
 
-  if (featureFlags.enableGetAllUsers && usersInChat && usersInChat.length) {
+  if (usersInChat && usersInChat.length) {
     addMessageToCache(
       usersInChat,
       usersInChatCache,
-      ircCacheResourceKeys.usersInChat
+      ircResourceKeys.usersInChat
     );
   }
 }

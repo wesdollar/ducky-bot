@@ -1,5 +1,5 @@
 import { getUserJoinedChat } from "../../helpers/messages/get-user-joined-chat/get-user-joined-chat";
-import { ircCacheResourceKeys } from "../../constants/irc-cache-keys";
+import { ircResourceKeys } from "../../constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 import { handleGetUserJoinedChat } from "./handle-get-user-joined-chat";
 
@@ -45,7 +45,7 @@ describe("handle get user joined chat", () => {
     expect(addMessageToCache).toBeCalledWith(
       mockUserJoinedChatObj,
       [],
-      ircCacheResourceKeys.userJoinedChat
+      ircResourceKeys.userJoinedChat
     );
   });
 

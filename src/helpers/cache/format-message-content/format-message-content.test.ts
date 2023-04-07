@@ -1,5 +1,4 @@
-import { logMessageContent } from "../../log-formatters/log-message-content";
-import { logMessageTitle } from "../../log-formatters/log-message-title";
+import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 import { formatMessageContent } from "./format-message-content";
 
 jest.mock("../../log-formatters/log-message-content", () => ({
@@ -7,7 +6,7 @@ jest.mock("../../log-formatters/log-message-content", () => ({
 }));
 
 jest.mock("../../log-formatters/log-message-title", () => ({
-  logMessageTitle: jest.fn(),
+  logIncomingMessageTitle: jest.fn(),
 }));
 
 console.error = jest.fn();
@@ -67,14 +66,14 @@ describe("unhappy path", () => {
     // @ts-ignore mockery
     formatMessageContent(undefined);
 
-    expect(logMessageTitle).toBeCalledTimes(1);
+    expect(logIncomingMessageTitle).toBeCalledTimes(1);
   });
 
   it("should call logMessageContent if message does not hit on any of the specified types", () => {
     // @ts-ignore mockery
     formatMessageContent(undefined);
 
-    expect(logMessageContent).toBeCalledTimes(1);
+    expect(logIncomingMessageTitle).toBeCalledTimes(1);
   });
 
   it("return an empty string when it does not match on a data type", () => {

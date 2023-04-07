@@ -1,5 +1,5 @@
 import { getUserLeftChat } from "../../helpers/messages/get-user-left-chat/get-user-left-chat";
-import { ircCacheResourceKeys } from "../../constants/irc-cache-keys";
+import { ircResourceKeys } from "../../constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 import { handleGetUserLeftChat } from "./handle-get-user-left-chat";
 
@@ -35,7 +35,7 @@ describe("handle get user left chat", () => {
     expect(addMessageToCache).toBeCalledWith(
       getUserLeftChatReturnObj,
       [],
-      ircCacheResourceKeys.userLeftChat
+      ircResourceKeys.userLeftChat
     );
   });
 
