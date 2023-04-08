@@ -2,6 +2,7 @@ import { ircResourceKeys } from "../../../constants/irc-resource-keys";
 import { getTimestamp } from "../../dates/get-timestamp";
 import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
 import type WebSocket from "ws";
+import { formatMessageContent } from "../format-message-content/format-message-content";
 
 // data was previously WebSocket.Data
 export const ircMessageObject = (
@@ -33,6 +34,11 @@ export const ircMessageObject = (
     case ircResourceKeys.usersInChat:
       return {
         users: data,
+        timestamp: getTimestamp(),
+      };
+    case ircResourceKeys.ircMessages:
+      return {
+        message: formatMessageContent(data),
         timestamp: getTimestamp(),
       };
     default:

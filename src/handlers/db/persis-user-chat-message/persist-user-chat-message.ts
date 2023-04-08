@@ -18,14 +18,17 @@ export const persistUserChatMessage = async (
   }
 
   for (const ircMessage of cacheData) {
-    const { message, user } = ircMessage.message;
+    const { message, username, displayName, mod, subscriber } =
+      ircMessage.message;
     const { timestamp } = ircMessage;
 
     try {
       await prisma.user.upsert({
-        where: { username: user },
+        where: { username },
         update: {
           lastSeen: new Date(getTimestamp()),
+          mod,
+          subscriber,
           messages: {
             create: {
               message,
@@ -34,7 +37,10 @@ export const persistUserChatMessage = async (
           },
         },
         create: {
-          username: user,
+          username,
+          displayName,
+          mod,
+          subscriber,
           messages: {
             create: {
               message,

@@ -24,6 +24,7 @@ import type {
   InterServerEvents,
   ServerToClientEvents,
 } from "./types/socket-io";
+import { persistIrcMessageLog } from "./handlers/db/persist-irc-message-log/persist-irc-message-log";
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ const io = new Server<
   SocketData
 >(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
   },
 });
 
@@ -169,9 +170,10 @@ ws.on("open", () => {
 ws.on("message", function (data: WebSocket.Data) {
   let message = "";
 
-  incomingIrcMessageLogCache.push(
-    ircMessageObject(data, ircResourceKeys.ircMessages)
-  );
+  const ircMessage = ircMessageObject(data, ircResourceKeys.ircMessages);
+
+  incomingIrcMessageLogCache.push(ircMessage);
+  persistIrcMessageLog(ircMessage);
 
   try {
     twitchIrcCache.set(ircResourceKeys.ircMessages, incomingIrcMessageLogCache);
