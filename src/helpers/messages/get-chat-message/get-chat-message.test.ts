@@ -1,44 +1,44 @@
 import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 import { getChatMessage } from "./get-chat-message";
 
+// Mocks
+jest.mock("../../cache/format-message-content/format-message-content", () => ({
+  formatMessageContent: jest.fn((message: string) => message),
+}));
 jest.mock("../../log-formatters/log-message-title", () => ({
   logIncomingMessageTitle: jest.fn(),
 }));
 
-const username = "dollardojo";
-const message1 = "bleedPurple";
-const message2 =
-  "a full sentence to make sure that we are getting the entire thing out of our regex";
+describe("getChatMessage", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-const simpleString = `:${username}!${username}@${username}.tmi.twitch.tv PRIVMSG #dollardojo :${message1}`;
+  test("should return undefined for invalid message", () => {
+    const message = "invalid message";
 
-const complexString = `:${username}!${username}@${username}.tmi.twitch.tv PRIVMSG #dollardojo :${message2}`;
+    const chatMessage = getChatMessage(message);
 
-describe("get chat messages", () => {
-  it("should return an object with a user and message property on a simple, one-word message", () => {
-    const response = getChatMessage(simpleString);
+    expect(chatMessage).toBeUndefined();
+  });
 
-    expect(response).toEqual({
-      user: username,
-      message: message1,
+  test("should extract chat message from message", () => {
+    const message =
+      "@badge-info=subscriber/1;badges=broadcaster/1,subscriber/0,sub-gifter/1;client-nonce=3bb9b96e62dd25c841f9097e8ee18530;color=;display-name=DollarDojo;emotes=;first-msg=0;flags=;id=ace2fbf5-fc70-4022-be00-60dee28c7819;mod=0;returning-chatter=0;room-id=889699487;subscriber=1;tmi-sent-ts=1680930778825;turbo=0;user-id=889699487;user-type= :dollardojo!dollardojo@dollardojo.tmi.twitch.tv PRIVMSG #dollardojo :wassup";
+
+    const chatMessage = getChatMessage(message);
+
+    expect(chatMessage).toEqual({
+      displayName: "DollarDojo",
+      mod: false,
+      subscriber: true,
+      username: "dollardojo",
+      message: "wassup",
     });
+
+    expect(logIncomingMessageTitle).toHaveBeenCalledWith(
+      "chat message received",
+      "chat-message"
+    );
   });
-
-  it("should return an object with a user and message property on a complex string that is a full sentence", () => {
-    const response = getChatMessage(complexString);
-
-    expect(response).toEqual({
-      user: username,
-      message: message2,
-    });
-  });
-
-  it("called logMessageTitle", () => {
-    getChatMessage(complexString);
-
-    expect(logIncomingMessageTitle).toBeCalled();
-  });
-
-  // 0-18;first-msg=0;flags=;id=e51b86af-e9ad-457d-afa8-287f283e5ee6;mod=0;returning-chatter=0;room-id=889699487;subscriber=1;tmi-sent-ts=1680725769195;turbo=0;user-id=889699487;user-type= :dollardojo
-  // it should not regex match on the above string
 });
