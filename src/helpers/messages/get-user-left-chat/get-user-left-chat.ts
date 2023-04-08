@@ -6,6 +6,8 @@ export const getUserLeftChat = (message: string) => {
   const match = message.match(regex);
 
   if (match) {
+    console.log("hit user left chat inside match");
+
     const [, user] = match;
 
     logIncomingMessageTitle("user left chat", ircResourceKeys.userLeftChat);

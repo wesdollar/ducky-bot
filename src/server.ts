@@ -13,7 +13,7 @@ import type NodeCache from "node-cache";
 import { twitchIrcCache } from "./twitch-irc-cache";
 import { persistUserChatMessage } from "./handlers/db/persis-user-chat-message/persist-user-chat-message";
 import { persistUserJoinedChat } from "./handlers/db/persist-user-joined-chat/persist-user-joined-chat";
-import { persisUserLeftChat } from "./handlers/db/persis-user-left-chat/persist-user-left-chat";
+import { persistUserLeftChat } from "./handlers/db/persis-user-left-chat/persist-user-left-chat";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -132,7 +132,7 @@ app.get("/cron-jobs/persist-to-db/:resourceKey", (req, res) => {
       break;
     case ircResourceKeys.userLeftChat:
       try {
-        persisUserLeftChat(cacheData);
+        persistUserLeftChat(cacheData);
         twitchIrcCache.del(ircResourceKeys.userLeftChat);
       } catch (error) {
         return res.json({ success: false, error });

@@ -1,21 +1,25 @@
 import { prisma } from "../../../prisma";
 import { handleErrors } from "../../handle-errors/handle-errors";
 import { noCacheDataErrorMessage } from "../persis-user-chat-message/persist-user-chat-message";
-import { type PersistedUserJoinedChatData } from "../persist-user-joined-chat/persist-user-joined-chat";
 
-export const persisUserLeftChat = async (
-  cacheData: PersistedUserJoinedChatData[]
+interface PersisUserLeftChatData {
+  user: string;
+  timestamp: Date;
+}
+
+export const persistUserLeftChat = async (
+  cacheData: PersisUserLeftChatData[]
 ) => {
   if (!cacheData.length) {
     return Error(noCacheDataErrorMessage);
   }
 
   for (const ircMessage of cacheData) {
-    const { username, timestamp } = ircMessage;
+    const { user, timestamp } = ircMessage;
 
     try {
       await prisma.user.upsert({
-        where: { username },
+        where: { username: user },
         update: {
           lastSeen: new Date(timestamp),
           leftChat: {
@@ -25,7 +29,7 @@ export const persisUserLeftChat = async (
           },
         },
         create: {
-          username,
+          username: user,
           lastSeen: new Date(timestamp),
           leftChat: {
             create: {

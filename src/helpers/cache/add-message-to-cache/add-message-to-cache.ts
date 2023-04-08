@@ -8,7 +8,7 @@ import {
   persistUserChatMessage,
 } from "../../../handlers/db/persis-user-chat-message/persist-user-chat-message";
 import { persistUserJoinedChat } from "../../../handlers/db/persist-user-joined-chat/persist-user-joined-chat";
-import { persisUserLeftChat } from "../../../handlers/db/persis-user-left-chat/persist-user-left-chat";
+import { persistUserLeftChat } from "../../../handlers/db/persis-user-left-chat/persist-user-left-chat";
 
 export interface UserJoinedChat {
   username: string;
@@ -65,7 +65,7 @@ export const addMessageToCache = async (
           twitchIrcCache.set(ircResourceKey, []);
           break;
         case ircResourceKeys.userLeftChat:
-          await persisUserLeftChat(cacheData as any);
+          await persistUserLeftChat(cacheData as any);
           twitchIrcCache.set(ircResourceKey, []);
           break;
         default:

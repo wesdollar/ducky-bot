@@ -1,11 +1,14 @@
 import type WebSocket from "ws";
+import { formatMessageContent } from "../../helpers/cache/format-message-content/format-message-content";
 
 export const handleServerPing = (message: string, ws: WebSocket) => {
-  if (message.includes("PING")) {
-    console.log("incoming ping");
+  const formattedMessage = formatMessageContent(message);
+
+  if (formattedMessage.includes("PING")) {
+    console.log("\n\nhit includes statement of incoming ping\n\n");
 
     try {
-      ws.send(`PONG ${message.split(" ")[1]}`);
+      ws.send(`PONG ${formattedMessage.split(" ")[1]}`);
       console.log("responded to PING");
     } catch (error) {
       console.error(error);
