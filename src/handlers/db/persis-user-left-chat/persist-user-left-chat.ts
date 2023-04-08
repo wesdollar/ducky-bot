@@ -11,11 +11,11 @@ export const persisUserLeftChat = async (
   }
 
   for (const ircMessage of cacheData) {
-    const { user: chatUser, timestamp } = ircMessage;
+    const { username, timestamp } = ircMessage;
 
     try {
       await prisma.user.upsert({
-        where: { username: chatUser },
+        where: { username },
         update: {
           lastSeen: new Date(timestamp),
           leftChat: {
@@ -25,7 +25,8 @@ export const persisUserLeftChat = async (
           },
         },
         create: {
-          username: chatUser,
+          username,
+          lastSeen: new Date(timestamp),
           leftChat: {
             create: {
               timestamp: new Date(timestamp),

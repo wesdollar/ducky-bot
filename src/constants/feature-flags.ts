@@ -6,10 +6,10 @@ export const featureFlags = {
     logToConsole: true,
   },
   [ircResourceKeys.userJoinedChat]: {
-    logToConsole: false,
+    logToConsole: true,
   },
   [ircResourceKeys.userLeftChat]: {
-    logToConsole: false,
+    logToConsole: true,
   },
   [ircResourceKeys.usersInChat]: {
     enabled: false,

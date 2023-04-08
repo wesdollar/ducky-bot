@@ -3,6 +3,7 @@ import { getTimestamp } from "../../dates/get-timestamp";
 import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
 import type WebSocket from "ws";
 import { formatMessageContent } from "../format-message-content/format-message-content";
+import { UserJoinedChat } from "../add-message-to-cache/add-message-to-cache";
 
 // data was previously WebSocket.Data
 export const ircMessageObject = (
@@ -12,9 +13,12 @@ export const ircMessageObject = (
     | Buffer
     | ArrayBuffer
     | string[]
-    | ChatMessageObject,
+    | ChatMessageObject
+    | UserJoinedChat,
   ircResourceKey: string
 ): any => {
+  let localData;
+
   switch (ircResourceKey) {
     case ircResourceKeys.chatMessages:
       return {
@@ -22,8 +26,13 @@ export const ircMessageObject = (
         timestamp: getTimestamp(),
       };
     case ircResourceKeys.userJoinedChat:
+      localData = data as unknown as UserJoinedChat;
+
       return {
-        user: data,
+        username: localData.username,
+        lastSeen: localData.lastSeen,
+        subscriber: localData.subscriber,
+        mod: localData.mod,
         timestamp: getTimestamp(),
       };
     case ircResourceKeys.userLeftChat:
@@ -38,7 +47,7 @@ export const ircMessageObject = (
       };
     case ircResourceKeys.ircMessages:
       return {
-        message: formatMessageContent(data),
+        message: formatMessageContent(data as any),
         timestamp: getTimestamp(),
       };
     default:

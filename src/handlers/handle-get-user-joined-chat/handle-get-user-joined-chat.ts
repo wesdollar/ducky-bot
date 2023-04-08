@@ -1,20 +1,42 @@
 import { getUserJoinedChat } from "../../helpers/messages/get-user-joined-chat/get-user-joined-chat";
 import { ircResourceKeys } from "../../constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
+import { prisma } from "../../prisma";
 
-export function handleGetUserJoinedChat(
+export const handleGetUserJoinedChat = async (
   message: string,
   userJoinedChatCache: [],
   io: any
-) {
-  const userJoinedChat = getUserJoinedChat(message);
+) => {
+  const user = getUserJoinedChat(message);
 
-  if (userJoinedChat) {
+  if (user) {
+    const userObject = {
+      username: user,
+      subscriber: false,
+      mod: false,
+      lastSeen: null as Date | null,
+    };
+
+    let existingUser;
+
+    try {
+      existingUser = await prisma.user.findFirst({
+        where: {
+          username: user,
+        },
+      });
+
+      userObject.subscriber = existingUser?.subscriber || false;
+      userObject.mod = existingUser?.mod || false;
+      userObject.lastSeen = existingUser?.lastSeen || null;
+    } catch (error) {}
+
     addMessageToCache(
-      userJoinedChat,
+      userObject,
       userJoinedChatCache,
       ircResourceKeys.userJoinedChat,
       io
     );
   }
-}
+};

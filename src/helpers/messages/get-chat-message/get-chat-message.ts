@@ -13,6 +13,8 @@ export interface ChatMessageObject {
 export const getChatMessage = (
   message: string
 ): ChatMessageObject | undefined => {
+  // 'user-type': ' :eyedsplatter!eyedsplatter@eyedsplatter.tmi.twitch.tv PRIVMSG #dollardojo :VoHiYo'
+
   const regex =
     /@badge-info=([^;]*)\b.*badges=([^;]*)\b.*display-name=([^;]*)\b.*mod=([^;]*)\b.*subscriber=([^;]*)\b.*user-id=(\d+)\b.*user-type= :([^!]+).*PRIVMSG.*:(.*)/;
 

@@ -2,9 +2,23 @@ import { ircMessageObject } from "../irc-message-object/irc-message-object";
 import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
 import { twitchIrcCache } from "../../../twitch-irc-cache";
 import { featureFlags } from "../../../constants/feature-flags";
+import { ircResourceKeys } from "../../../constants/irc-resource-keys";
+import {
+  type PersistedChatMessageCacheData,
+  persistUserChatMessage,
+} from "../../../handlers/db/persis-user-chat-message/persist-user-chat-message";
+import { persistUserJoinedChat } from "../../../handlers/db/persist-user-joined-chat/persist-user-joined-chat";
+import { persisUserLeftChat } from "../../../handlers/db/persis-user-left-chat/persist-user-left-chat";
 
-export const addMessageToCache = (
-  message: string | string[] | ChatMessageObject,
+export interface UserJoinedChat {
+  username: string;
+  lastSeen: Date | null;
+  mod: boolean;
+  subscriber: boolean;
+}
+
+export const addMessageToCache = async (
+  message: string | string[] | ChatMessageObject | UserJoinedChat,
   cacheData: unknown[],
   ircResourceKey: string,
   io: any
@@ -31,9 +45,32 @@ export const addMessageToCache = (
         JSON.stringify(twitchIrcCache.get(ircResourceKey), null, 2)
       );
 
-      io.sockets.emit("get-cache", {
-        data: twitchIrcCache.get(ircResourceKey),
-      });
+      const cacheData = twitchIrcCache.get(ircResourceKey) as any[];
+
+      if (cacheData.length) {
+        io.sockets.emit(`${ircResourceKey}-cache`, {
+          data: cacheData,
+        });
+      }
+
+      switch (ircResourceKey) {
+        case ircResourceKeys.chatMessages:
+          await persistUserChatMessage(
+            cacheData as PersistedChatMessageCacheData[]
+          );
+          twitchIrcCache.set(ircResourceKey, []);
+          break;
+        case ircResourceKeys.userJoinedChat:
+          await persistUserJoinedChat(cacheData as any);
+          twitchIrcCache.set(ircResourceKey, []);
+          break;
+        case ircResourceKeys.userLeftChat:
+          await persisUserLeftChat(cacheData as any);
+          twitchIrcCache.set(ircResourceKey, []);
+          break;
+        default:
+          break;
+      }
     }
 
     return true;

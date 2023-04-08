@@ -2,7 +2,6 @@ import express from "express";
 import WebSocket from "ws";
 import * as dotenv from "dotenv-flow";
 import axios from "axios";
-import { log } from "console";
 import { ircResourceKeys } from "./constants/irc-resource-keys";
 import { errorResponse } from "./responses/error-response";
 import { httpStatusCodes } from "./constants/http-status-codes";
@@ -25,6 +24,7 @@ import type {
   ServerToClientEvents,
 } from "./types/socket-io";
 import { persistIrcMessageLog } from "./handlers/db/persist-irc-message-log/persist-irc-message-log";
+import { handleServerPing } from "./handlers/handle-server-ping/handle-server-ping";
 
 dotenv.config();
 
@@ -175,10 +175,12 @@ ws.on("message", function (data: WebSocket.Data) {
   incomingIrcMessageLogCache.push(ircMessage);
   persistIrcMessageLog(ircMessage);
 
+  handleServerPing(message, ws);
+
   try {
     twitchIrcCache.set(ircResourceKeys.ircMessages, incomingIrcMessageLogCache);
   } catch (error) {
-    log(`failed to save ${ircResourceKeys.ircMessages} to cache`);
+    console.log(`failed to save ${ircResourceKeys.ircMessages} to cache`);
   }
 
   if (Buffer.isBuffer(data)) {
@@ -205,11 +207,10 @@ ws.on("message", function (data: WebSocket.Data) {
 
 io.on("connection", (socket) => {
   socket.on("hello", () => {
-    console.log("hello received");
-  });
-
-  socket.on("world", () => {
-    console.log("world received");
+    io.sockets.emit(
+      "helloAck",
+      "Welcome to DuckyBot! I'll be your host, Ducky!"
+    );
   });
 });
 

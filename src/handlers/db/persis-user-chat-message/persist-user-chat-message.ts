@@ -17,6 +17,8 @@ export const persistUserChatMessage = async (
     return Error(noCacheDataErrorMessage);
   }
 
+  let retryAttempt = 0;
+
   for (const ircMessage of cacheData) {
     const { message, username, displayName, mod, subscriber } =
       ircMessage.message;
@@ -52,7 +54,13 @@ export const persistUserChatMessage = async (
     } catch (error) {
       handleErrors(error, "prisma upsert for new chat message failed");
 
-      return Error("persist user chat message failed");
+      if (retryAttempt < 6) {
+        console.log(`retrying persist new chat message`);
+        persistUserChatMessage(cacheData);
+        retryAttempt = retryAttempt++;
+      }
+
+      return Error(`retry attempts on chat message persist failed`);
     }
   }
 };
