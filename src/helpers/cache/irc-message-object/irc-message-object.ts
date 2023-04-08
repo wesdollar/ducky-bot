@@ -3,7 +3,7 @@ import { getTimestamp } from "../../dates/get-timestamp";
 import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
 import type WebSocket from "ws";
 import { formatMessageContent } from "../format-message-content/format-message-content";
-import { UserJoinedChat } from "../add-message-to-cache/add-message-to-cache";
+import { type UserJoinedChat } from "../add-message-to-cache/add-message-to-cache";
 
 // data was previously WebSocket.Data
 export const ircMessageObject = (

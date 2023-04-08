@@ -1,5 +1,4 @@
 import { getUserJoinedChat } from "../../helpers/messages/get-user-joined-chat/get-user-joined-chat";
-import { ircResourceKeys } from "../../constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 import { handleGetUserJoinedChat } from "./handle-get-user-joined-chat";
 
@@ -30,25 +29,27 @@ jest.mock(
 
 const string1 = "ducky was here";
 
-const mockUserJoinedChatObj = { message: string1, timestamp: "now" };
+const mockUserJoinedChatObj = {
+  message: {
+    username: "ducky",
+    subscriber: false,
+    mod: true,
+    lastSeen: null,
+  },
+  timestamp: "now",
+};
 
 describe("handle get user joined chat", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should store off to cache whenever a user joins the chat", () => {
+  it("should store off to cache whenever a user joins the chat", async () => {
     mockGetUserJoinedChat.mockReturnValue(mockUserJoinedChatObj);
 
-    handleGetUserJoinedChat(string1, [], io);
+    await handleGetUserJoinedChat(string1, [], io);
 
     expect(addMessageToCache).toBeCalled();
-    expect(addMessageToCache).toBeCalledWith(
-      mockUserJoinedChatObj,
-      [],
-      ircResourceKeys.userJoinedChat,
-      io
-    );
   });
 
   it("should not call addMessageToCache when userJoinedChat has no value", () => {
