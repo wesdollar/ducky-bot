@@ -74,6 +74,27 @@ app.get("/ducky-cb", (req, res) => {
   return res.json({ success: "true" });
 });
 
+app.get("/emote-test", (req, res) => {
+  const clientId = process.env.DUCKYDOJO_BOT_CLIENT_ID;
+
+  fetch(
+    `https://api.twitch.tv/helix/chat/emotes?id=emotesv2_c086a52d3c304d88becb97389b451f76`,
+    {
+      // @ts-ignore shut up
+      headers: {
+        "Client-ID": clientId,
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const emoteName = data.data[0].name;
+
+      console.log(emoteName);
+    })
+    .catch((error) => console.error(error));
+});
+
 app.get("/twitch-irc-cache/:resourceKey", (req, res) => {
   const { resourceKey: requestedResource } = req.params;
   const cacheData = twitchIrcCache.get(requestedResource);
@@ -175,7 +196,7 @@ ws.on("message", function (data: WebSocket.Data) {
   incomingIrcMessageLogCache.push(ircMessage);
   persistIrcMessageLog(ircMessage);
 
-  handleServerPing(message, ws);
+  handleServerPing(data, ws);
 
   try {
     twitchIrcCache.set(ircResourceKeys.ircMessages, incomingIrcMessageLogCache);

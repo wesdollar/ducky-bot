@@ -2,6 +2,7 @@ import { camelCase, trimStart } from "lodash";
 import { ircResourceKeys } from "../../../constants/irc-resource-keys";
 import { formatMessageContent } from "../../cache/format-message-content/format-message-content";
 import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
+import { audioChatCommands } from "../../../constants/chat-commands";
 
 export interface ParsedMessageData {
   badgeInfo: string;
@@ -32,6 +33,7 @@ export interface ChatMessageObject {
   message: string;
   mod: boolean;
   subscriber: boolean;
+  chatCommands: string[];
 }
 
 export const getChatMessage = (
@@ -60,15 +62,37 @@ export const getChatMessage = (
     return acc;
   }, {});
 
-  const { displayName, mod, subscriber } = obj as ParsedMessageData;
+  const { displayName, mod, subscriber, emotes } = obj as ParsedMessageData;
+
+  const emotesArray = emotes.split("/").map((emote: string) => {
+    const [id] = emote.split(":");
+
+    if (!id) {
+      return null;
+    }
+
+    return `https://static-cdn.jtvnw.net/emoticons/v2/${id}/static/dark/3.0`;
+  });
 
   const chatData = {
     displayName,
     mod: Boolean(Number(mod)),
     subscriber: Boolean(Number(subscriber)),
     username,
+    emotes: emotesArray,
     message: formatMessageContent(chatMessage),
+    chatCommands: [] as string[],
   };
+
+  audioChatCommands.some((command) => {
+    if (chatData.message.includes(command)) {
+      console.log("includes commands: ", command);
+
+      return (chatData.chatCommands = [command]);
+    }
+
+    return [];
+  });
 
   logIncomingMessageTitle(
     "chat message received",
