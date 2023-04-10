@@ -49,6 +49,7 @@ export const getChatMessage = (
   // TODO: replace characters with actual emote
   // @badge-info=subscriber/1;badges=broadcaster/1,subscriber/0,sub-gifter/1;client-nonce=8e2c3b59cd04cc46b40995c0a43fbcba;color=;display-name=DollarDojo;emote-only=1;emotes=emotesv2_65dc3686b8204c0ba506b5b8da4ee8f6:0-11,13-24,26-37;first-msg=0;flags=;id=1c47f58c-5bca-4420-af56-0318ef50b0ca;mod=0;returning-chatter=0;room-id=889699487;subscriber=1;tmi-sent-ts=1681087804493;turbo=0;user-id=889699487;user-type= :dollardojo!dollardojo@dollardojo.tmi.twitch.tv PRIVMSG #dollardojo :dollar62Hype dollar62Hype dollar62Hype
 
+  // TODO: proper
   const chatData = {
     displayName,
     mod: Boolean(Number(mod)),

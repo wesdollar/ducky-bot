@@ -25,6 +25,8 @@ import type {
 } from "@dollardojo/modules/dist/types/socket-io";
 import { persistIrcMessageLog } from "./handlers/db/persist-irc-message-log/persist-irc-message-log";
 import { handleServerPing } from "./handlers/handle-server-ping/handle-server-ping";
+import { prisma } from "./prisma";
+import bodyParser from "body-parser";
 
 dotenv.config();
 
@@ -45,6 +47,7 @@ const io = new Server<
 const port = 3001;
 
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   res.json("Hello World!");
@@ -71,6 +74,48 @@ app.get("/access-token", (req, res) => {
 });
 
 app.get("/ducky-cb", (req, res) => {
+  return res.json({ success: "true" });
+});
+
+app.post("/api/users/notes/:username", async (req, res) => {
+  const {
+    params: { username },
+    body: { note },
+  } = req;
+
+  if (!username) {
+    return res.json(
+      errorResponse(
+        httpStatusCodes.badRequest,
+        "username is required",
+        new Error("username required")
+      )
+    );
+  }
+
+  try {
+    await prisma.user.update({
+      where: {
+        username,
+      },
+      data: {
+        notes: {
+          create: {
+            note,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    res.json(
+      errorResponse(
+        httpStatusCodes.rangeNotSatisfiable,
+        "failed to create note",
+        new Error("failed to create note")
+      )
+    );
+  }
+
   return res.json({ success: "true" });
 });
 

@@ -22,6 +22,7 @@ model User {
   joinedChat  UserJoined[]
   leftChat    UserLeft[]
   messages    UserMessage[]
+  notes       Note[]
 }
 
 model UserJoined {
@@ -56,6 +57,15 @@ model MessageLog {
   id        Int      @id @default(autoincrement())
   message   String
   timestamp DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  note      String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
