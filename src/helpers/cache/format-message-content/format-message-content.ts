@@ -17,9 +17,6 @@ export const formatMessageContent = (
   data:
     | MessageObjectWithString
     | MessageObjectWithBuffer
-    | string[]
-    | string
-    | Buffer
     | ArrayBuffer
     | WebSocket.Data
     | ChatMessageObject
@@ -39,6 +36,7 @@ export const formatMessageContent = (
   }
 
   if (Array.isArray(data) && data.length) {
+    // TODO: use error handler
     console.error("provided message is an array, which is not supported");
 
     return "";
@@ -67,7 +65,6 @@ export const formatMessageContent = (
 
   logIncomingMessageTitle(`format message content error`);
   logMessageContent(`data is of type ${typeof data} and could not be matched`);
-  console.log("unparsed message: ", data);
 
   return "";
 };
