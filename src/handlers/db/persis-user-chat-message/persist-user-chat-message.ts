@@ -1,12 +1,7 @@
 import { getTimestamp } from "../../../helpers/dates/get-timestamp";
 import { handleErrors } from "../../handle-errors/handle-errors";
 import { prisma } from "../../../prisma";
-import { type ChatMessageObject } from "../../../helpers/messages/get-chat-message/get-chat-message";
-
-export interface PersistedChatMessageCacheData {
-  message: ChatMessageObject;
-  timestamp: string;
-}
+import { type PersistedChatMessageCacheData } from "@dollardojo/modules/dist/types/chat/persisted-chat-message-cache-data";
 
 export const noCacheDataErrorMessage = "no cache data provided";
 

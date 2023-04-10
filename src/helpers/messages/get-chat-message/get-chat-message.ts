@@ -1,40 +1,10 @@
 import { camelCase, trimStart } from "lodash";
-import { ircResourceKeys } from "../../../constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 import { formatMessageContent } from "../../cache/format-message-content/format-message-content";
 import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
-import { audioChatCommands } from "../../../constants/chat-commands";
-
-export interface ParsedMessageData {
-  badgeInfo: string;
-  badges: string;
-  clientNonce: string;
-  color: string;
-  displayName: string;
-  emoteOnly: string;
-  emotes: string;
-  firstMsg: string;
-  flags: string;
-  id: string;
-  mod: string;
-  returningChatter: string;
-  roomId: string;
-  subscriber: string;
-  tmiSentTs: string;
-  turbo: string;
-  userId: string;
-  userType: string;
-  username: string;
-  chatMessage: string;
-}
-
-export interface ChatMessageObject {
-  displayName: string;
-  username: string;
-  message: string;
-  mod: boolean;
-  subscriber: boolean;
-  chatCommands: string[];
-}
+import { audioChatCommands } from "@dollardojo/modules/dist/constants/audio-chat-commands";
+import { type ChatMessageObject } from "@dollardojo/modules/dist/types/chat/chat-message-object";
+import { type ParsedMessageData } from "@dollardojo/modules/dist/types/irc-messages/parsed-message-data";
 
 export const getChatMessage = (
   message: string

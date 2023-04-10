@@ -1,21 +1,13 @@
 import { ircMessageObject } from "../irc-message-object/irc-message-object";
-import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
+import { type ChatMessageObject } from "@dollardojo/modules/dist/types/chat/chat-message-object";
 import { twitchIrcCache } from "../../../twitch-irc-cache";
 import { featureFlags } from "../../../constants/feature-flags";
-import { ircResourceKeys } from "../../../constants/irc-resource-keys";
-import {
-  type PersistedChatMessageCacheData,
-  persistUserChatMessage,
-} from "../../../handlers/db/persis-user-chat-message/persist-user-chat-message";
+import { persistUserChatMessage } from "../../../handlers/db/persis-user-chat-message/persist-user-chat-message";
 import { persistUserJoinedChat } from "../../../handlers/db/persist-user-joined-chat/persist-user-joined-chat";
 import { persistUserLeftChat } from "../../../handlers/db/persis-user-left-chat/persist-user-left-chat";
-
-export interface UserJoinedChat {
-  username: string;
-  lastSeen: Date | null;
-  mod: boolean;
-  subscriber: boolean;
-}
+import { type UserJoinedChat } from "@dollardojo/modules/dist/types/chat/user-joined-chat";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
+import { type PersistedChatMessageCacheData } from "@dollardojo/modules/dist/types/chat/persisted-chat-message-cache-data";
 
 export const addMessageToCache = async (
   message: string | string[] | ChatMessageObject | UserJoinedChat,

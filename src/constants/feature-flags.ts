@@ -1,4 +1,4 @@
-import { ircResourceKeys } from "./irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 
 export const featureFlags = {
   allowLogToConsole: true,

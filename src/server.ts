@@ -2,10 +2,10 @@ import express from "express";
 import WebSocket from "ws";
 import * as dotenv from "dotenv-flow";
 import axios from "axios";
-import { ircResourceKeys } from "./constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 import { errorResponse } from "./responses/error-response";
-import { httpStatusCodes } from "./constants/http-status-codes";
-import { errorKeys } from "./constants/error-keys";
+import { httpStatusCodes } from "@dollardojo/modules/dist/constants/http-status-codes";
+import { errorKeys } from "@dollardojo/modules/dist/constants/error-keys";
 import { ircMessageObject } from "./helpers/cache/irc-message-object/irc-message-object";
 import { formatMessageContent } from "./helpers/cache/format-message-content/format-message-content";
 import { handleIrcMessages } from "./handle-irc-messages";
@@ -22,7 +22,7 @@ import type {
   SocketData,
   InterServerEvents,
   ServerToClientEvents,
-} from "./types/socket-io";
+} from "@dollardojo/modules/dist/types/socket-io";
 import { persistIrcMessageLog } from "./handlers/db/persist-irc-message-log/persist-irc-message-log";
 import { handleServerPing } from "./handlers/handle-server-ping/handle-server-ping";
 
@@ -111,14 +111,6 @@ app.get("/twitch-irc-cache/:resourceKey", (req, res) => {
 
   return res.json(cacheData);
 });
-
-export interface IrcUserMessage {
-  message: {
-    message: string;
-    user: string;
-  };
-  timestamp: string;
-}
 
 app.get("/cron-jobs/persist-to-db/:resourceKey", (req, res) => {
   const { resourceKey: requestedResource } = req.params;

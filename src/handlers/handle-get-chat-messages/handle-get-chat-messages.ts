@@ -1,5 +1,5 @@
 import { getChatMessage } from "../../helpers/messages/get-chat-message/get-chat-message";
-import { ircResourceKeys } from "../../constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 
 export function handleGetChatMessages(

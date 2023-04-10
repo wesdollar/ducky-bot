@@ -1,5 +1,5 @@
 import { getUserLeftChat } from "../../helpers/messages/get-user-left-chat/get-user-left-chat";
-import { ircResourceKeys } from "../../constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 
 export function handleGetUserLeftChat(

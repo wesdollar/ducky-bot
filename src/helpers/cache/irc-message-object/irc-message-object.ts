@@ -1,9 +1,9 @@
-import { ircResourceKeys } from "../../../constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 import { getTimestamp } from "../../dates/get-timestamp";
-import { type ChatMessageObject } from "../../messages/get-chat-message/get-chat-message";
+import { type ChatMessageObject } from "@dollardojo/modules/dist/types/chat/chat-message-object";
 import type WebSocket from "ws";
 import { formatMessageContent } from "../format-message-content/format-message-content";
-import { type UserJoinedChat } from "../add-message-to-cache/add-message-to-cache";
+import { type UserJoinedChat } from "@dollardojo/modules/dist/types/chat/user-joined-chat";
 
 // data was previously WebSocket.Data
 export const ircMessageObject = (

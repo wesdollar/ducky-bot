@@ -1,5 +1,5 @@
 import { getNamesInChat } from "../../helpers/messages/get-names-in-chat/get-names-in-chat";
-import { ircResourceKeys } from "../../constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 
 export function handleGetNamesInChat(
