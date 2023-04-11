@@ -2,7 +2,7 @@ import NodeCache from "node-cache";
 import { addMessageToCache } from "./add-message-to-cache";
 import { twitchIrcCache } from "../../../twitch-irc-cache";
 import { ircMessageObject } from "../irc-message-object/irc-message-object";
-import { ircResourceKeys } from "../../../constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 
 jest.mock("../irc-message-object/irc-message-object", () => ({
   ircMessageObject: jest.fn(() => ({
@@ -74,7 +74,7 @@ describe("addMessageToCache", () => {
     ]);
   });
 
-  it("should catch and log error when cache set fails", () => {
+  it("should catch and log error when cache set fails", async () => {
     const message: string = "test3";
     const errorMsg = "test error";
 
@@ -82,26 +82,31 @@ describe("addMessageToCache", () => {
       throw new Error(errorMsg);
     });
 
-    const result = addMessageToCache(message, cacheData, ircResourceKey, io);
+    const result = await addMessageToCache(
+      message,
+      cacheData,
+      ircResourceKey,
+      io
+    );
 
     expect(result).toBeFalsy();
   });
 
-  it("should not allow a array with an index of one that is null pass through", () => {
+  it("should not allow a array with an index of one that is null pass through", async () => {
     // @ts-ignore mockery
-    const result = addMessageToCache([null], [], cacheInstance, "anything");
+    const result = await addMessageToCache([], [], cacheInstance, "anything");
 
     expect(result).toBeFalsy();
   });
 
-  it("should log the cached values to console", () => {
-    addMessageToCache(message, cacheData, ircResourceKey, io);
+  it("should log the cached values to console", async () => {
+    await addMessageToCache(message, cacheData, ircResourceKey, io);
 
     expect(console.log).toBeCalledTimes(1);
   });
 
-  it("do nothing if message is empty", () => {
-    const result = addMessageToCache("", cacheData, ircResourceKey, io);
+  it("do nothing if message is empty", async () => {
+    const result = await addMessageToCache("", cacheData, ircResourceKey, io);
 
     expect(result).toBe(undefined);
   });

@@ -1,7 +1,15 @@
 import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 
-export const featureFlags = {
-  allowLogToConsole: true,
+type FeatureFlags = {
+  [key: string]:
+    | {
+        enabled?: boolean;
+        logToConsole?: boolean;
+      }
+    | boolean;
+};
+
+export const featureFlags: FeatureFlags = {
   [ircResourceKeys.chatMessages]: {
     logToConsole: true,
   },
@@ -15,4 +23,5 @@ export const featureFlags = {
     enabled: false,
     logToConsole: false,
   },
+  allowLogToConsole: true,
 };

@@ -1,7 +1,7 @@
 import { handleGetChatMessages } from "./handle-get-chat-messages";
 import { getChatMessage } from "../../helpers/messages/get-chat-message/get-chat-message";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
-import { ircResourceKeys } from "../../constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
 
 jest.mock("../../helpers/messages/get-chat-message/get-chat-message", () => ({
   getChatMessage: jest.fn(),

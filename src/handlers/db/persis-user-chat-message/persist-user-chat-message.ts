@@ -1,4 +1,4 @@
-import { getTimestamp } from "../../../helpers/dates/get-timestamp";
+import { getTimestamp } from "@dollardojo/modules/dist/helpers/get-timestamp/get-timestamp";
 import { handleErrors } from "../../handle-errors/handle-errors";
 import { prisma } from "../../../prisma";
 import { type PersistedChatMessageCacheData } from "@dollardojo/modules/dist/types/chat/persisted-chat-message-cache-data";

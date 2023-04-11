@@ -14,7 +14,7 @@ const testString = "this is my string";
 
 describe("creation of the irc message object", () => {
   it("should return a properly formatted object represening the message to be persisted in cache and storage", () => {
-    const result = ircMessageObject(testString);
+    const result = ircMessageObject(testString, "hello");
 
     expect(result).toEqual({
       message: testString,

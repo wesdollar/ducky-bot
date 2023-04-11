@@ -9,7 +9,6 @@ import { errorKeys } from "@dollardojo/modules/dist/constants/error-keys";
 import { ircMessageObject } from "./helpers/cache/irc-message-object/irc-message-object";
 import { formatMessageContent } from "./helpers/cache/format-message-content/format-message-content";
 import { handleIrcMessages } from "./handle-irc-messages";
-import type NodeCache from "node-cache";
 import { twitchIrcCache } from "./twitch-irc-cache";
 import { persistUserChatMessage } from "./handlers/db/persis-user-chat-message/persist-user-chat-message";
 import { persistUserJoinedChat } from "./handlers/db/persist-user-joined-chat/persist-user-joined-chat";
@@ -27,10 +26,12 @@ import { persistIrcMessageLog } from "./handlers/db/persist-irc-message-log/pers
 import { handleServerPing } from "./handlers/handle-server-ping/handle-server-ping";
 import { prisma } from "./prisma";
 import bodyParser from "body-parser";
+import { type IrcMessageLogData } from "@dollardojo/modules/dist/types/irc-messages/irc-message-log-data";
+import { type GenericChatResponseObject } from "@dollardojo/modules/dist/types/irc-messages/irc-message-object";
 
 dotenv.config();
 
-const incomingIrcMessageLogCache = [] as NodeCache[];
+const incomingIrcMessageLogCache = [] as IrcMessageLogData[];
 const app = express();
 const httpServer = createServer(app);
 const io = new Server<
@@ -228,7 +229,10 @@ ws.on("open", () => {
 ws.on("message", function (data: WebSocket.Data) {
   let message = "";
 
-  const ircMessage = ircMessageObject(data, ircResourceKeys.ircMessages);
+  const ircMessage = ircMessageObject(
+    data,
+    ircResourceKeys.ircMessages
+  ) as GenericChatResponseObject;
 
   incomingIrcMessageLogCache.push(ircMessage);
   persistIrcMessageLog(ircMessage);

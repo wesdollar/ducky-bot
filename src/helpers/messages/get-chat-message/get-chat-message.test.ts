@@ -34,6 +34,8 @@ describe("getChatMessage", () => {
       subscriber: true,
       username: "dollardojo",
       message: "wassup",
+      emotes: [null],
+      chatCommand: "",
     });
 
     expect(logIncomingMessageTitle).toHaveBeenCalledWith(

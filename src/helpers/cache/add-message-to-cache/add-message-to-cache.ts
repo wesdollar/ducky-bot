@@ -30,8 +30,9 @@ export const addMessageToCache = async (
   try {
     twitchIrcCache.set(ircResourceKey, updatedCache);
 
-    // @ts-ignore fuck off
-    if (featureFlags[ircResourceKey].logToConsole) {
+    const featureFlagValue = featureFlags[ircResourceKey];
+
+    if (typeof featureFlagValue === "object" && featureFlagValue.logToConsole) {
       console.log(
         `\n\n${ircResourceKey} cache data:\n`,
         JSON.stringify(twitchIrcCache.get(ircResourceKey), null, 2)
