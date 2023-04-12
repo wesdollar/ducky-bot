@@ -43,11 +43,11 @@ const io = new Server<
   SocketData
 >(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.SERVER_ORIGIN,
   },
 });
 
-const port = 3001;
+const port = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
