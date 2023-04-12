@@ -1,7 +1,7 @@
 import { prisma } from "../../../prisma";
 import { handleErrors } from "../../handle-errors/handle-errors";
 import { noCacheDataErrorMessage } from "../persis-user-chat-message/persist-user-chat-message";
-import type { PersistedUserJoinedChatData } from "@dollardojo/modules/dist/types/chat/persisted-user-joined-chat-data";
+import type { PersistedUserJoinedChatData } from "@dollardojo/modules/types/chat/persisted-user-joined-chat-data";
 
 export const persistUserJoinedChat = async (
   cacheData: PersistedUserJoinedChatData[]

@@ -2,7 +2,7 @@ import NodeCache from "node-cache";
 import { addMessageToCache } from "./add-message-to-cache";
 import { twitchIrcCache } from "../../../twitch-irc-cache";
 import { ircMessageObject } from "../irc-message-object/irc-message-object";
-import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/constants/irc-resource-keys";
 
 jest.mock("../irc-message-object/irc-message-object", () => ({
   ircMessageObject: jest.fn(() => ({

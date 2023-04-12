@@ -1,7 +1,7 @@
 import { logMessageContent } from "../../log-formatters/log-message-content";
 import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
 import type WebSocket from "ws";
-import { type ChatMessageObject } from "@dollardojo/modules/dist/types/chat/chat-message-object";
+import { type ChatMessageObject } from "@dollardojo/modules/types/chat/chat-message-object";
 
 interface MessageObjectWithString {
   data: string;

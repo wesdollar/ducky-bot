@@ -1,4 +1,4 @@
-import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/constants/irc-resource-keys";
 import { twitchIrcCache } from "./twitch-irc-cache";
 import { handleGetNamesInChat } from "./handlers/handle-get-names-in-chat/handle-get-names-in-chat";
 import { handleGetChatMessages } from "./handlers/handle-get-chat-messages/handle-get-chat-messages";

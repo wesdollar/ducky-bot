@@ -1,4 +1,4 @@
-import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/constants/irc-resource-keys";
 
 type FeatureFlags = {
   [key: string]:

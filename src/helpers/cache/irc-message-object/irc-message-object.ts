@@ -1,16 +1,16 @@
-import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
-import { type ChatMessageObject } from "@dollardojo/modules/dist/types/chat/chat-message-object";
+import { ircResourceKeys } from "@dollardojo/modules/constants/irc-resource-keys";
+import { type ChatMessageObject } from "@dollardojo/modules/types/chat/chat-message-object";
 import type WebSocket from "ws";
 import { formatMessageContent } from "../format-message-content/format-message-content";
-import { type UserJoinedChat } from "@dollardojo/modules/dist/types/chat/user-joined-chat";
-import { getTimestamp } from "@dollardojo/modules/dist/helpers/get-timestamp/get-timestamp";
+import { type UserJoinedChat } from "@dollardojo/modules/types/chat/user-joined-chat";
+import { getTimestamp } from "@dollardojo/modules/helpers/get-timestamp/get-timestamp";
 import type {
   ResponseChatMessageObject,
   ResponseUserJoinedObject,
   ResponseUserLeftObject,
   ResponseUsersInChatObject,
   GenericChatResponseObject,
-} from "@dollardojo/modules/dist/types/irc-messages/irc-message-object";
+} from "@dollardojo/modules/types/irc-messages/irc-message-object";
 
 // data was previously WebSocket.Data
 export const ircMessageObject = (

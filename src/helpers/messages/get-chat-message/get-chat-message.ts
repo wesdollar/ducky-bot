@@ -1,10 +1,10 @@
 import { camelCase, trimStart } from "lodash";
-import { ircResourceKeys } from "@dollardojo/modules/dist/constants/irc-resource-keys";
+import { ircResourceKeys } from "@dollardojo/modules/constants/irc-resource-keys";
 import { formatMessageContent } from "../../cache/format-message-content/format-message-content";
 import { logIncomingMessageTitle } from "../../log-formatters/log-message-title";
-import { audioChatCommands } from "@dollardojo/modules/dist/constants/audio-chat-commands";
-import { type ChatMessageObject } from "@dollardojo/modules/dist/types/chat/chat-message-object";
-import { type ParsedMessageData } from "@dollardojo/modules/dist/types/irc-messages/parsed-message-data";
+import { audioChatCommands } from "@dollardojo/modules/constants/audio-chat-commands";
+import { type ChatMessageObject } from "@dollardojo/modules/types/chat/chat-message-object";
+import { type ParsedMessageData } from "@dollardojo/modules/types/irc-messages/parsed-message-data";
 
 export const getChatMessage = (
   message: string
