@@ -2,7 +2,7 @@ import { ircMessageObject } from "./irc-message-object";
 
 const currentTime = "current time";
 
-jest.mock("../../dates/get-timestamp", () => ({
+jest.mock("@dollardojo/modules/helpers/get-timestamp/get-timestamp", () => ({
   getTimestamp: jest.fn(() => currentTime),
 }));
 

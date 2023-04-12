@@ -3,7 +3,7 @@ import WebSocket from "ws";
 import * as dotenv from "dotenv-flow";
 import axios from "axios";
 import { ircResourceKeys } from "@dollardojo/modules/constants/irc-resource-keys";
-import { errorResponse } from "./responses/error-response";
+import { errorResponse } from "./responses/error-response/error-response";
 import { httpStatusCodes } from "@dollardojo/modules/constants/http-status-codes";
 import { errorKeys } from "@dollardojo/modules/constants/error-keys";
 import { ircMessageObject } from "./helpers/cache/irc-message-object/irc-message-object";
@@ -28,6 +28,8 @@ import { prisma } from "./prisma";
 import bodyParser from "body-parser";
 import { type IrcMessageLogData } from "@dollardojo/modules/types/irc-messages/irc-message-log-data";
 import { type GenericChatResponseObject } from "@dollardojo/modules/types/irc-messages/irc-message-object";
+import { login } from "./handlers/users/login/login";
+import { successObject } from "./responses/success-object/success-object";
 
 dotenv.config();
 
@@ -72,6 +74,26 @@ app.get("/access-token", (req, res) => {
   return res.redirect(
     `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=${process.env.DUCKYDOJO_BOT_CLIENT_ID}&redirect_uri=${process.env.DUCKY_BOT_REDIRECT_URI}&scope=chat%3Aread+chat%3Aedit+user%3Aread%3Asubscriptions+user%3Aread%3Aemail`
   );
+});
+
+app.post("/users/auth/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const authenticatedUser = await login(username, password);
+
+    return res.json(successObject(authenticatedUser, "user is authenticated"));
+  } catch (error) {
+    return res
+      .status(httpStatusCodes.unauthorized)
+      .json(
+        errorResponse(
+          httpStatusCodes.unauthorized,
+          "user is not authenticated",
+          error
+        )
+      );
+  }
 });
 
 app.get("/ducky-cb", (req, res) => {
