@@ -23,4 +23,16 @@ describe("get user who left chat", () => {
 
     expect(logIncomingMessageTitle).toBeCalled();
   });
+
+  it("it should return the user's name", () => {
+    const user = getUserLeftChat(string);
+
+    expect(user).toEqual(username);
+  });
+
+  it("it should return undefined when string doesn't match", () => {
+    const user = getUserLeftChat("whatever");
+
+    expect(user).toBeUndefined();
+  });
 });
