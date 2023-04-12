@@ -1,4 +1,4 @@
-import { ErrorKey } from "../constants/error-keys";
+import { type ErrorKey } from "@dollardojo/modules/constants/error-keys";
 
 type ErrorStack = unknown;
 

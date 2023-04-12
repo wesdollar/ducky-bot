@@ -29,7 +29,7 @@ describe("handle get names in chat", () => {
   it("should add message to cache when we parse the users in chat on bot entry of channel", () => {
     mockGetNamesInChat.mockReturnValue(["this", "that"]);
 
-    handleGetNamesInChat(string1, []);
+    handleGetNamesInChat(string1, [], () => {});
 
     expect(addMessageToCache).toBeCalled();
   });

@@ -1,7 +1,7 @@
 import { getChatMessage } from "../../helpers/messages/get-chat-message/get-chat-message";
-import { ircResourceKeys } from "../../constants/irc-resource-keys";
 import { addMessageToCache } from "../../helpers/cache/add-message-to-cache/add-message-to-cache";
 import { handleGetChatMessages } from "./handle-get-chat-messages";
+import { ircResourceKeys } from "@dollardojo/modules/constants/irc-resource-keys";
 
 jest.mock("../../twitch-irc-cache", () => ({
   twitchIrcCache: jest.fn(),
