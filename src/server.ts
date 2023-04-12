@@ -32,7 +32,7 @@ import { login } from "./handlers/users/login/login";
 import { successObject } from "./responses/success-object/success-object";
 
 dotenv.config();
-const port = process.env.SERVER_PORT?.toString() || "";
+const port = process.env.PORT || 5000;
 
 const incomingIrcMessageLogCache = [] as IrcMessageLogData[];
 const app = express();
