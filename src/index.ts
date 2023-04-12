@@ -47,16 +47,14 @@ const io = new Server<
   },
 });
 
-const port = 3000;
-
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.json("Hello World!");
 });
 
-app.get("/validate", async (req, res) => {
+app.get("/api/validate", async (req, res) => {
   try {
     const response = await axios.get("https://id.twitch.tv/oauth2/validate", {
       headers: {
@@ -70,17 +68,17 @@ app.get("/validate", async (req, res) => {
   }
 });
 
-app.get("/health-check", (req, res) => {
+app.get("/api/health-check", (req, res) => {
   return res.json({ healthy: true });
 });
 
-app.get("/access-token", (req, res) => {
+app.get("/api/access-token", (req, res) => {
   return res.redirect(
     `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=${process.env.DUCKYDOJO_BOT_CLIENT_ID}&redirect_uri=${process.env.DUCKY_BOT_REDIRECT_URI}&scope=chat%3Aread+chat%3Aedit+user%3Aread%3Asubscriptions+user%3Aread%3Aemail`
   );
 });
 
-app.post("/users/auth/login", async (req, res) => {
+app.post("/api/users/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -100,7 +98,7 @@ app.post("/users/auth/login", async (req, res) => {
   }
 });
 
-app.get("/ducky-cb", (req, res) => {
+app.get("/api/ducky-cb", (req, res) => {
   return res.json({ success: "true" });
 });
 
@@ -146,7 +144,7 @@ app.post("/api/users/notes/:username", async (req, res) => {
   return res.json({ success: "true" });
 });
 
-app.get("/emote-test", (req, res) => {
+app.get("/api/emote-test", (req, res) => {
   const clientId = process.env.DUCKYDOJO_BOT_CLIENT_ID;
 
   fetch(
@@ -167,7 +165,7 @@ app.get("/emote-test", (req, res) => {
     .catch((error) => console.error(error));
 });
 
-app.get("/twitch-irc-cache/:resourceKey", (req, res) => {
+app.get("/api/twitch-irc-cache/:resourceKey", (req, res) => {
   const { resourceKey: requestedResource } = req.params;
   const cacheData = twitchIrcCache.get(requestedResource);
 
@@ -184,7 +182,7 @@ app.get("/twitch-irc-cache/:resourceKey", (req, res) => {
   return res.json(cacheData);
 });
 
-app.get("/cron-jobs/persist-to-db/:resourceKey", (req, res) => {
+app.get("/api/cron-jobs/persist-to-db/:resourceKey", (req, res) => {
   const { resourceKey: requestedResource } = req.params;
   let cacheData = twitchIrcCache.get(requestedResource) as [] | undefined;
 
@@ -302,4 +300,6 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(port);
+httpServer.listen();
+
+export default app;
