@@ -51,11 +51,15 @@ const io = new Server<
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get("/api", (req, res) => {
-  res.json("Hello World!");
+app.get("/", (req, res) => {
+  res.json({
+    message:
+      "Hi! I'm Ducky, and this is my bot. This section of the pond is only for my flock. Thanks for dropping by, though!",
+    hangout: "Join us twitch.tv/dollardojo if you want to take a dip with us!",
+  });
 });
 
-app.get("/api/validate", async (req, res) => {
+app.get("/validate", async (req, res) => {
   try {
     const response = await axios.get("https://id.twitch.tv/oauth2/validate", {
       headers: {
@@ -69,17 +73,17 @@ app.get("/api/validate", async (req, res) => {
   }
 });
 
-app.get("/api/health-check", (req, res) => {
+app.get("/health-check", (req, res) => {
   return res.json({ healthy: true });
 });
 
-app.get("/api/access-token", (req, res) => {
+app.get("/access-token", (req, res) => {
   return res.redirect(
     `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=${process.env.DUCKYDOJO_BOT_CLIENT_ID}&redirect_uri=${process.env.DUCKY_BOT_REDIRECT_URI}&scope=chat%3Aread+chat%3Aedit+user%3Aread%3Asubscriptions+user%3Aread%3Aemail`
   );
 });
 
-app.post("/api/users/auth/login", async (req, res) => {
+app.post("/users/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -99,11 +103,11 @@ app.post("/api/users/auth/login", async (req, res) => {
   }
 });
 
-app.get("/api/ducky-cb", (req, res) => {
+app.get("/ducky-cb", (req, res) => {
   return res.json({ success: "true" });
 });
 
-app.post("/api/users/notes/:username", async (req, res) => {
+app.post("/users/notes/:username", async (req, res) => {
   const {
     params: { username },
     body: { note },
@@ -145,11 +149,11 @@ app.post("/api/users/notes/:username", async (req, res) => {
   return res.json({ success: "true" });
 });
 
-app.get("/api/emote-test", (req, res) => {
+app.get("/emote-test", (req, res) => {
   const clientId = process.env.DUCKYDOJO_BOT_CLIENT_ID;
 
   fetch(
-    `https://api.twitch.tv/helix/chat/emotes?id=emotesv2_c086a52d3c304d88becb97389b451f76`,
+    `https:/.twitch.tv/helix/chat/emotes?id=emotesv2_c086a52d3c304d88becb97389b451f76`,
     {
       // @ts-ignore shut up
       headers: {
@@ -166,7 +170,7 @@ app.get("/api/emote-test", (req, res) => {
     .catch((error) => console.error(error));
 });
 
-app.get("/api/twitch-irc-cache/:resourceKey", (req, res) => {
+app.get("/twitch-irc-cache/:resourceKey", (req, res) => {
   const { resourceKey: requestedResource } = req.params;
   const cacheData = twitchIrcCache.get(requestedResource);
 
@@ -183,7 +187,7 @@ app.get("/api/twitch-irc-cache/:resourceKey", (req, res) => {
   return res.json(cacheData);
 });
 
-app.get("/api/cron-jobs/persist-to-db/:resourceKey", (req, res) => {
+app.get("/cron-jobs/persist-to-db/:resourceKey", (req, res) => {
   const { resourceKey: requestedResource } = req.params;
   let cacheData = twitchIrcCache.get(requestedResource) as [] | undefined;
 
