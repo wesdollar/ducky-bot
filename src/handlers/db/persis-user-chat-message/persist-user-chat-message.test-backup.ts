@@ -1,10 +1,10 @@
 import { prisma } from "../../../prisma";
 import { handleErrors } from "../../handle-errors/handle-errors";
 import {
-  type PersistedChatMessageCacheData,
   persistUserChatMessage,
   noCacheDataErrorMessage,
 } from "./persist-user-chat-message";
+import { type PersistedChatMessageCacheData } from "@dollardojo/modules/types/chat/persisted-chat-message-cache-data";
 
 jest.mock("../../../prisma", () => ({
   prisma: {
