@@ -3,16 +3,16 @@ import WebSocket from "ws";
 import * as dotenv from "dotenv-flow";
 import axios from "axios";
 import { ircResourceKeys } from "@dollardojo/modules/constants/irc-resource-keys";
-import { errorResponse } from "../responses/error-response/error-response";
+import { errorResponse } from "./responses/error-response/error-response";
 import { httpStatusCodes } from "@dollardojo/modules/constants/http-status-codes";
 import { errorKeys } from "@dollardojo/modules/constants/error-keys";
-import { ircMessageObject } from "../helpers/cache/irc-message-object/irc-message-object";
-import { formatMessageContent } from "../helpers/cache/format-message-content/format-message-content";
-import { handleIrcMessages } from "../handle-irc-messages";
-import { twitchIrcCache } from "../twitch-irc-cache";
-import { persistUserChatMessage } from "../handlers/db/persis-user-chat-message/persist-user-chat-message";
-import { persistUserJoinedChat } from "../handlers/db/persist-user-joined-chat/persist-user-joined-chat";
-import { persistUserLeftChat } from "../handlers/db/persis-user-left-chat/persist-user-left-chat";
+import { ircMessageObject } from "./helpers/cache/irc-message-object/irc-message-object";
+import { formatMessageContent } from "./helpers/cache/format-message-content/format-message-content";
+import { handleIrcMessages } from "./handle-irc-messages";
+import { twitchIrcCache } from "./twitch-irc-cache";
+import { persistUserChatMessage } from "./handlers/db/persis-user-chat-message/persist-user-chat-message";
+import { persistUserJoinedChat } from "./handlers/db/persist-user-joined-chat/persist-user-joined-chat";
+import { persistUserLeftChat } from "./handlers/db/persis-user-left-chat/persist-user-left-chat";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -22,14 +22,14 @@ import type {
   InterServerEvents,
   ServerToClientEvents,
 } from "@dollardojo/modules/types/socket-io";
-import { persistIrcMessageLog } from "../handlers/db/persist-irc-message-log/persist-irc-message-log";
-import { handleServerPing } from "../handlers/handle-server-ping/handle-server-ping";
-import { prisma } from "../prisma";
+import { persistIrcMessageLog } from "./handlers/db/persist-irc-message-log/persist-irc-message-log";
+import { handleServerPing } from "./handlers/handle-server-ping/handle-server-ping";
+import { prisma } from "./prisma";
 import bodyParser from "body-parser";
 import { type IrcMessageLogData } from "@dollardojo/modules/types/irc-messages/irc-message-log-data";
 import { type GenericChatResponseObject } from "@dollardojo/modules/types/irc-messages/irc-message-object";
-import { login } from "../handlers/users/login/login";
-import { successObject } from "../responses/success-object/success-object";
+import { login } from "./handlers/users/login/login";
+import { successObject } from "./responses/success-object/success-object";
 
 dotenv.config();
 
@@ -301,5 +301,3 @@ io.on("connection", (socket) => {
 });
 
 httpServer.listen();
-
-export default app;
