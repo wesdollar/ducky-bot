@@ -70,6 +70,10 @@ app.get("/validate", async (req, res) => {
   }
 });
 
+app.get("/health-check", (req, res) => {
+  return res.json({ healthy: true });
+});
+
 app.get("/access-token", (req, res) => {
   return res.redirect(
     `https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=${process.env.DUCKYDOJO_BOT_CLIENT_ID}&redirect_uri=${process.env.DUCKY_BOT_REDIRECT_URI}&scope=chat%3Aread+chat%3Aedit+user%3Aread%3Asubscriptions+user%3Aread%3Aemail`
