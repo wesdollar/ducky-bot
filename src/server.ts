@@ -305,4 +305,5 @@ io.on("connection", (socket) => {
   });
 });
 
+console.log(`you're connected on port ${port}`);
 httpServer.listen(port);
